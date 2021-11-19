@@ -1,0 +1,1809 @@
+
+registers:	file format elf32-littlearm
+
+Disassembly of section .text:
+
+08000194 <Reset>:
+; pub unsafe extern "C" fn Reset() -> ! {
+ 8000194:      	push	{r7, lr}
+ 8000196:      	mov	r7, sp
+;     __pre_init();
+ 8000198:      	bl	0x8000d46 <__pre_init>  @ imm = #0xbaa
+;     while sbss < ebss {
+ 800019c:      	movw	r0, #0x4
+ 80001a0:      	movw	r1, #0x0
+ 80001a4:      	movt	r0, #0x2000
+ 80001a8:      	movt	r1, #0x2000
+ 80001ac:      	cmp	r1, r0
+ 80001ae:      	bhs	0x80001d8 <Reset+0x44>  @ imm = #0x26
+ 80001b0:      	movw	r1, #0x0
+ 80001b4:      	movs	r2, #0x0
+ 80001b6:      	movt	r1, #0x2000
+ 80001ba:      	str	r2, [r1], #4
+;     while sbss < ebss {
+ 80001be:      	cmp	r1, r0
+ 80001c0:      	itttt	lo
+ 80001c2:      	strlo	r2, [r1], #4
+;     while sbss < ebss {
+ 80001c6:      	cmplo	r1, r0
+ 80001c8:      	strlo	r2, [r1], #4
+;     while sbss < ebss {
+ 80001cc:      	cmplo	r1, r0
+ 80001ce:      	bhs	0x80001d8 <Reset+0x44>  @ imm = #0x6
+ 80001d0:      	str	r2, [r1], #4
+;     while sbss < ebss {
+ 80001d4:      	cmp	r1, r0
+ 80001d6:      	blo	0x80001ba <Reset+0x26>  @ imm = #-0x20
+;     while sdata < edata {
+ 80001d8:      	movw	r1, #0x0
+ 80001dc:      	movw	r0, #0x0
+ 80001e0:      	movt	r1, #0x2000
+ 80001e4:      	movt	r0, #0x2000
+ 80001e8:      	cmp	r0, r1
+ 80001ea:      	bhs	0x800020a <Reset+0x76>  @ imm = #0x1c
+ 80001ec:      	adds	r2, r0, #0x4
+ 80001ee:      	cmp	r1, r2
+ 80001f0:      	it	hi
+ 80001f2:      	movhi	r2, r1
+ 80001f4:      	mvns	r1, r0
+ 80001f6:      	add	r1, r2
+ 80001f8:      	adds	r1, #0x4
+ 80001fa:      	bic	r2, r1, #0x3
+ 80001fe:      	movw	r1, #0x13f0
+ 8000202:      	movt	r1, #0x800
+ 8000206:      	bl	0x8001124 <__aeabi_memcpy4> @ imm = #0xf1a
+ 800020a:      	movw	r0, #0xed88
+ 800020e:      	movt	r0, #0xe000
+;                 *SCB_CPACR | SCB_CPACR_FPU_ENABLE | SCB_CPACR_FPU_USER,
+ 8000212:      	ldr	r1, [r0]
+ 8000214:      	orr	r1, r1, #0xf00000
+ 8000218:      	str	r1, [r0]
+;             trampoline()
+ 800021a:      	bl	0x8000d3a <ResetTrampoline> @ imm = #0xb1c
+ 800021e:      	trap
+
+08000220 <main>:
+; #[entry]
+ 8000220:      	push	{r7, lr}
+ 8000222:      	mov	r7, sp
+ 8000224:      	bl	0x800022a <registers::__cortex_m_rt_main::hbf612fdb771a7681> @ imm = #0x2
+ 8000228:      	trap
+
+0800022a <registers::__cortex_m_rt_main::hbf612fdb771a7681>:
+; fn main() -> ! {
+ 800022a:      	push	{r7, lr}
+ 800022c:      	mov	r7, sp
+; 	aux7::init();
+ 800022e:      	bl	0x8000254 <aux7::init::h2ae269f35bca95f0> @ imm = #0x22
+ 8000232:      	movw	r0, #0x1018
+ 8000236:      	mov.w	r1, #0x200
+ 800023a:      	movt	r0, #0x4800
+ 800023e:      	str	r1, [r0]
+ 8000240:      	mov.w	r1, #0x800
+ 8000244:      	str	r1, [r0]
+ 8000246:      	mov.w	r1, #0x2000000
+ 800024a:      	str	r1, [r0]
+ 800024c:      	mov.w	r1, #0x8000000
+ 8000250:      	str	r1, [r0]
+; 	loop {}
+ 8000252:      	b	0x8000252 <registers::__cortex_m_rt_main::hbf612fdb771a7681+0x28> @ imm = #-0x4
+
+08000254 <aux7::init::h2ae269f35bca95f0>:
+; pub fn init() -> (ITM, &'static RegisterBlock) {
+ 8000254:      	push	{r4, r5, r6, r7, lr}
+ 8000256:      	add	r7, sp, #0xc
+ 8000258:      	push.w	{r8, r9, r11}
+;     let r: u32 = call_asm!(__primask_r() -> u32);
+ 800025c:      	bl	0x800111a <__primask_r> @ imm = #0xeba
+ 8000260:      	mov	r4, r0
+;     call_asm!(__cpsid());
+ 8000262:      	bl	0x8001112 <__cpsid>     @ imm = #0xeac
+;             if unsafe { DEVICE_PERIPHERALS } {
+ 8000266:      	movw	r8, #0x0
+;     if r & (1 << 0) == (1 << 0) {
+ 800026a:      	and	r0, r4, #0x1
+;             if unsafe { DEVICE_PERIPHERALS } {
+ 800026e:      	movt	r8, #0x2000
+ 8000272:      	ldrb.w	r5, [r8]
+ 8000276:      	cmp	r5, #0x0
+ 8000278:      	itt	eq
+ 800027a:      	moveq	r1, #0x1
+;         DEVICE_PERIPHERALS = true;
+ 800027c:      	strbeq.w	r1, [r8]
+;     if primask.is_active() {
+ 8000280:      	cmp	r0, #0x0
+;     call_asm!(__cpsie());
+ 8000282:      	it	eq
+ 8000284:      	bleq	0x8001116 <__cpsie>     @ imm = #0xe8e
+ 8000288:      	cmp	r5, #0x0
+ 800028a:      	bne.w	0x80003c6 <aux7::init::h2ae269f35bca95f0+0x172> @ imm = #0x138
+ 800028e:      	movw	r0, #0x1028
+ 8000292:      	movs	r6, #0x1
+ 8000294:      	movt	r0, #0x4002
+ 8000298:      	ldr	r1, [r0, #-20]
+;         self.w.bits = (self.w.bits & !(0x01 << 21)) | (((value as u32) & 0x01) << 21);
+ 800029c:      	orr	r1, r1, #0x200000
+ 80002a0:      	str	r1, [r0, #-20]
+ 80002a4:      	ldr	r1, [r0]
+;         self.w.bits = (self.w.bits & !(0x01 << 21)) | (((value as u32) & 0x01) << 21);
+ 80002a6:      	orr	r1, r1, #0x200000
+ 80002aa:      	str	r1, [r0]
+ 80002ac:      	ldr	r1, [r0]
+;         self.w.bits = (self.w.bits & !(0x01 << 21)) | (((value as u32) & 0x01) << 21);
+ 80002ae:      	bic	r1, r1, #0x200000
+ 80002b2:      	str	r1, [r0]
+ 80002b4:      	movw	r0, #0x1000
+ 80002b8:      	movt	r0, #0x4800
+ 80002bc:      	ldr	r1, [r0]
+;         self.w.bits = (self.w.bits & !(0x03 << 18)) | (((value as u32) & 0x03) << 18);
+ 80002be:      	bfi	r1, r6, #18, #2
+ 80002c2:      	str	r1, [r0]
+ 80002c4:      	ldr	r1, [r0, #0x4]
+;         self.w.bits = (self.w.bits & !(0x01 << 9)) | (((value as u32) & 0x01) << 9);
+ 80002c6:      	bic	r1, r1, #0x200
+ 80002ca:      	str	r1, [r0, #0x4]
+ 80002cc:      	ldr	r1, [r0]
+;         self.w.bits = (self.w.bits & !(0x03 << 16)) | (((value as u32) & 0x03) << 16);
+ 80002ce:      	bfi	r1, r6, #16, #2
+ 80002d2:      	str	r1, [r0]
+ 80002d4:      	ldr	r1, [r0, #0x4]
+;         self.w.bits = (self.w.bits & !(0x01 << 8)) | (((value as u32) & 0x01) << 8);
+ 80002d6:      	bic	r1, r1, #0x100
+ 80002da:      	str	r1, [r0, #0x4]
+ 80002dc:      	ldr	r1, [r0]
+;         self.w.bits = (self.w.bits & !(0x03 << 20)) | (((value as u32) & 0x03) << 20);
+ 80002de:      	bfi	r1, r6, #20, #2
+ 80002e2:      	str	r1, [r0]
+ 80002e4:      	ldr	r1, [r0, #0x4]
+;         self.w.bits = (self.w.bits & !(0x01 << 10)) | (((value as u32) & 0x01) << 10);
+ 80002e6:      	bic	r1, r1, #0x400
+ 80002ea:      	str	r1, [r0, #0x4]
+ 80002ec:      	ldr	r1, [r0]
+;         self.w.bits = (self.w.bits & !(0x03 << 30)) | (((value as u32) & 0x03) << 30);
+ 80002ee:      	bfi	r1, r6, #30, #2
+ 80002f2:      	str	r1, [r0]
+ 80002f4:      	ldr	r1, [r0, #0x4]
+;         self.w.bits = (self.w.bits & !(0x01 << 15)) | (((value as u32) & 0x01) << 15);
+ 80002f6:      	bic	r1, r1, #0x8000
+ 80002fa:      	str	r1, [r0, #0x4]
+ 80002fc:      	ldr	r1, [r0]
+;         self.w.bits = (self.w.bits & !(0x03 << 22)) | (((value as u32) & 0x03) << 22);
+ 80002fe:      	bfi	r1, r6, #22, #2
+ 8000302:      	str	r1, [r0]
+ 8000304:      	ldr	r1, [r0, #0x4]
+;         self.w.bits = (self.w.bits & !(0x01 << 11)) | (((value as u32) & 0x01) << 11);
+ 8000306:      	bic	r1, r1, #0x800
+ 800030a:      	str	r1, [r0, #0x4]
+ 800030c:      	ldr	r1, [r0]
+;         self.w.bits = (self.w.bits & !(0x03 << 28)) | (((value as u32) & 0x03) << 28);
+ 800030e:      	bfi	r1, r6, #28, #2
+ 8000312:      	str	r1, [r0]
+ 8000314:      	ldr	r1, [r0, #0x4]
+;         self.w.bits = (self.w.bits & !(0x01 << 14)) | (((value as u32) & 0x01) << 14);
+ 8000316:      	bic	r1, r1, #0x4000
+ 800031a:      	str	r1, [r0, #0x4]
+ 800031c:      	ldr	r1, [r0]
+;         self.w.bits = (self.w.bits & !(0x03 << 24)) | (((value as u32) & 0x03) << 24);
+ 800031e:      	bfi	r1, r6, #24, #2
+ 8000322:      	str	r1, [r0]
+ 8000324:      	ldr	r1, [r0, #0x4]
+;         self.w.bits = (self.w.bits & !(0x01 << 12)) | (((value as u32) & 0x01) << 12);
+ 8000326:      	bic	r1, r1, #0x1000
+ 800032a:      	str	r1, [r0, #0x4]
+ 800032c:      	ldr	r1, [r0]
+;         self.w.bits = (self.w.bits & !(0x03 << 26)) | (((value as u32) & 0x03) << 26);
+ 800032e:      	bfi	r1, r6, #26, #2
+ 8000332:      	str	r1, [r0]
+ 8000334:      	ldr	r1, [r0, #0x4]
+;         self.w.bits = (self.w.bits & !(0x01 << 13)) | (((value as u32) & 0x01) << 13);
+ 8000336:      	bic	r1, r1, #0x2000
+ 800033a:      	str	r1, [r0, #0x4]
+ 800033c:      	mov.w	r1, #0x2000000
+ 8000340:      	str	r1, [r0, #0x18]
+ 8000342:      	mov.w	r1, #0x1000000
+ 8000346:      	str	r1, [r0, #0x18]
+ 8000348:      	mov.w	r1, #0x4000000
+ 800034c:      	str	r1, [r0, #0x18]
+ 800034e:      	mov.w	r1, #0x80000000
+ 8000352:      	str	r1, [r0, #0x18]
+ 8000354:      	mov.w	r1, #0x8000000
+ 8000358:      	str	r1, [r0, #0x18]
+ 800035a:      	mov.w	r1, #0x40000000
+ 800035e:      	str	r1, [r0, #0x18]
+ 8000360:      	mov.w	r1, #0x10000000
+ 8000364:      	str	r1, [r0, #0x18]
+ 8000366:      	mov.w	r1, #0x20000000
+ 800036a:      	str	r1, [r0, #0x18]
+;     let r: u32 = call_asm!(__primask_r() -> u32);
+ 800036c:      	bl	0x800111a <__primask_r> @ imm = #0xdaa
+ 8000370:      	mov	r9, r0
+;     call_asm!(__cpsid());
+ 8000372:      	bl	0x8001112 <__cpsid>     @ imm = #0xd9c
+;     let r: u32 = call_asm!(__primask_r() -> u32);
+ 8000376:      	bl	0x800111a <__primask_r> @ imm = #0xda0
+ 800037a:      	mov	r5, r0
+;     call_asm!(__cpsid());
+ 800037c:      	bl	0x8001112 <__cpsid>     @ imm = #0xd92
+;             if unsafe { TAKEN } {
+ 8000380:      	ldrb.w	r4, [r8, #0x1]
+;     if r & (1 << 0) == (1 << 0) {
+ 8000384:      	and	r0, r5, #0x1
+;             if unsafe { TAKEN } {
+ 8000388:      	cmp	r4, #0x0
+;         TAKEN = true;
+ 800038a:      	it	eq
+ 800038c:      	strbeq.w	r6, [r8, #0x1]
+;     if primask.is_active() {
+ 8000390:      	cmp	r0, #0x0
+;     call_asm!(__cpsie());
+ 8000392:      	it	eq
+ 8000394:      	bleq	0x8001116 <__cpsie>     @ imm = #0xd7e
+;         interrupt::free(|_| match cortex_m_0_7::peripheral::Peripherals::take() {
+ 8000398:      	cmp	r4, #0x0
+ 800039a:      	and	r0, r9, #0x1
+ 800039e:      	itt	eq
+ 80003a0:      	moveq	r1, #0x1
+;         TAKEN = true;
+ 80003a2:      	strbeq.w	r1, [r8, #0x1]
+;     if primask.is_active() {
+ 80003a6:      	cmp	r0, #0x0
+;     call_asm!(__cpsie());
+ 80003a8:      	it	eq
+ 80003aa:      	bleq	0x8001116 <__cpsie>     @ imm = #0xd68
+ 80003ae:      	cmp	r4, #0x0
+; }
+ 80003b0:      	itt	eq
+ 80003b2:      	popeq.w	{r8, r9, r11}
+ 80003b6:      	popeq	{r4, r5, r6, r7, pc}
+ 80003b8:      	movw	r0, #0x12a0
+ 80003bc:      	movt	r0, #0x800
+ 80003c0:      	bl	0x8000b32 <core::panicking::panic::h322418c4dc3a4e35> @ imm = #0x76e
+ 80003c4:      	trap
+ 80003c6:      	movw	r0, #0x1290
+ 80003ca:      	movt	r0, #0x800
+ 80003ce:      	bl	0x8000b32 <core::panicking::panic::h322418c4dc3a4e35> @ imm = #0x760
+ 80003d2:      	trap
+
+080003d4 <core::ops::function::FnOnce::call_once::h7de7ae07ef8ce8d2>:
+ 80003d4:      	ldr	r0, [r0]
+ 80003d6:      	b	0x80003d6 <core::ops::function::FnOnce::call_once::h7de7ae07ef8ce8d2+0x2> @ imm = #-0x4
+
+080003d8 <core::fmt::num::imp::<impl core::fmt::Display for u32>::fmt::hfbddbb8be9010143>:
+ 80003d8:      	push	{r4, r5, r6, r7, lr}
+ 80003da:      	add	r7, sp, #0xc
+ 80003dc:      	push.w	{r8, r9, r10, r11}
+ 80003e0:      	sub	sp, #0x3c
+ 80003e2:      	ldr	r5, [r0]
+ 80003e4:      	movw	r0, #0x2710
+ 80003e8:      	mov	r11, r1
+ 80003ea:      	movw	r12, #0xff9c
+ 80003ee:      	cmp	r5, r0
+ 80003f0:      	movw	r0, #0x12fc
+ 80003f4:      	movt	r0, #0x800
+ 80003f8:      	blo	0x800047a <core::fmt::num::imp::<impl core::fmt::Display for u32>::fmt::hfbddbb8be9010143+0xa2> @ imm = #0x7e
+ 80003fa:      	movw	lr, #0x1759
+ 80003fe:      	movw	r8, #0xd8f0
+ 8000402:      	movw	r6, #0xe0ff
+ 8000406:      	add.w	r10, sp, #0x14
+ 800040a:      	movs	r3, #0x0
+ 800040c:      	movt	lr, #0xd1b7
+ 8000410:      	movt	r8, #0xffff
+ 8000414:      	movw	r9, #0x147b
+ 8000418:      	movt	r6, #0x5f5
+ 800041c:      	str.w	r11, [sp, #0x10]
+ 8000420:      	umull	r2, r4, r5, lr
+ 8000424:      	add.w	r11, r10, r3
+ 8000428:      	subs	r3, #0x4
+ 800042a:      	cmp	r5, r6
+ 800042c:      	lsr.w	r2, r4, #0xd
+ 8000430:      	mla	r4, r2, r8, r5
+ 8000434:      	mov	r5, r2
+ 8000436:      	uxth	r1, r4
+ 8000438:      	lsr.w	r1, r1, #0x2
+ 800043c:      	mul	r1, r1, r9
+ 8000440:      	lsr.w	r1, r1, #0x11
+ 8000444:      	mla	r4, r1, r12, r4
+ 8000448:      	ldrh.w	r1, [r0, r1, lsl #1]
+ 800044c:      	strh.w	r1, [r11, #0x23]
+ 8000450:      	uxth	r4, r4
+ 8000452:      	ldrh.w	r4, [r0, r4, lsl #1]
+ 8000456:      	strh.w	r4, [r11, #0x25]
+ 800045a:      	bhi	0x8000420 <core::fmt::num::imp::<impl core::fmt::Display for u32>::fmt::hfbddbb8be9010143+0x48> @ imm = #-0x3e
+ 800045c:      	ldr.w	r11, [sp, #0x10]
+ 8000460:      	adds	r3, #0x27
+ 8000462:      	mov	r5, r2
+ 8000464:      	cmp	r5, #0x63
+ 8000466:      	bgt	0x8000480 <core::fmt::num::imp::<impl core::fmt::Display for u32>::fmt::hfbddbb8be9010143+0xa8> @ imm = #0x16
+ 8000468:      	mov	r1, r5
+ 800046a:      	cmp	r1, #0xa
+ 800046c:      	blt	0x80004a0 <core::fmt::num::imp::<impl core::fmt::Display for u32>::fmt::hfbddbb8be9010143+0xc8> @ imm = #0x30
+ 800046e:      	ldrh.w	r0, [r0, r1, lsl #1]
+ 8000472:      	subs	r6, r3, #0x2
+ 8000474:      	add	r1, sp, #0x14
+ 8000476:      	strh	r0, [r1, r6]
+ 8000478:      	b	0x80004aa <core::fmt::num::imp::<impl core::fmt::Display for u32>::fmt::hfbddbb8be9010143+0xd2> @ imm = #0x2e
+ 800047a:      	movs	r3, #0x27
+ 800047c:      	cmp	r5, #0x63
+ 800047e:      	ble	0x8000468 <core::fmt::num::imp::<impl core::fmt::Display for u32>::fmt::hfbddbb8be9010143+0x90> @ imm = #-0x1a
+ 8000480:      	uxth	r1, r5
+ 8000482:      	movw	r2, #0x147b
+ 8000486:      	lsrs	r1, r1, #0x2
+ 8000488:      	subs	r3, #0x2
+ 800048a:      	muls	r1, r2, r1
+ 800048c:      	add	r6, sp, #0x14
+ 800048e:      	lsrs	r1, r1, #0x11
+ 8000490:      	mla	r2, r1, r12, r5
+ 8000494:      	uxth	r2, r2
+ 8000496:      	ldrh.w	r2, [r0, r2, lsl #1]
+ 800049a:      	strh	r2, [r6, r3]
+ 800049c:      	cmp	r1, #0xa
+ 800049e:      	bge	0x800046e <core::fmt::num::imp::<impl core::fmt::Display for u32>::fmt::hfbddbb8be9010143+0x96> @ imm = #-0x34
+ 80004a0:      	subs	r6, r3, #0x1
+ 80004a2:      	add.w	r0, r1, #0x30
+ 80004a6:      	add	r1, sp, #0x14
+ 80004a8:      	strb	r0, [r1, r6]
+ 80004aa:      	ldr.w	r0, [r11]
+ 80004ae:      	add	r1, sp, #0x14
+ 80004b0:      	movw	r3, #0x13c4
+ 80004b4:      	add.w	r9, r1, r6
+ 80004b8:      	ldr.w	r5, [r11, #0x8]
+ 80004bc:      	ands	r8, r0, #0x1
+ 80004c0:      	lsl.w	r1, r0, #0x1d
+ 80004c4:      	mov.w	r10, #0x2b
+ 80004c8:      	movt	r3, #0x800
+ 80004cc:      	and.w	r2, r3, r1, asr #31
+ 80004d0:      	rsb.w	r4, r6, #0x27
+ 80004d4:      	it	eq
+ 80004d6:      	moveq.w	r10, #0x110000
+ 80004da:      	cmp	r5, #0x1
+ 80004dc:      	bne	0x8000512 <core::fmt::num::imp::<impl core::fmt::Display for u32>::fmt::hfbddbb8be9010143+0x13a> @ imm = #0x32
+ 80004de:      	mov	r5, r9
+ 80004e0:      	ldr.w	r9, [r11, #0xc]
+ 80004e4:      	add.w	r1, r4, r8
+ 80004e8:      	strd	r4, r2, [sp, #12]
+ 80004ec:      	cmp	r9, r1
+ 80004ee:      	bls	0x8000520 <core::fmt::num::imp::<impl core::fmt::Display for u32>::fmt::hfbddbb8be9010143+0x148> @ imm = #0x2e
+ 80004f0:      	lsls	r0, r0, #0x1c
+ 80004f2:      	str	r5, [sp, #0x8]
+ 80004f4:      	bmi	0x8000552 <core::fmt::num::imp::<impl core::fmt::Display for u32>::fmt::hfbddbb8be9010143+0x17a> @ imm = #0x5a
+ 80004f6:      	ldrb.w	r2, [r11, #0x20]
+ 80004fa:      	sub.w	r0, r9, r1
+ 80004fe:      	cmp	r2, #0x3
+ 8000500:      	it	eq
+ 8000502:      	moveq	r2, #0x1
+ 8000504:      	lsls	r1, r2, #0x1e
+ 8000506:      	beq	0x80005a6 <core::fmt::num::imp::<impl core::fmt::Display for u32>::fmt::hfbddbb8be9010143+0x1ce> @ imm = #0x9c
+ 8000508:      	cmp	r2, #0x1
+ 800050a:      	bne	0x80005ac <core::fmt::num::imp::<impl core::fmt::Display for u32>::fmt::hfbddbb8be9010143+0x1d4> @ imm = #0x9e
+ 800050c:      	movs	r5, #0x0
+ 800050e:      	mov	r1, r0
+ 8000510:      	b	0x80005b2 <core::fmt::num::imp::<impl core::fmt::Display for u32>::fmt::hfbddbb8be9010143+0x1da> @ imm = #0x9e
+ 8000512:      	mov	r0, r11
+ 8000514:      	mov	r1, r10
+ 8000516:      	bl	0x8000690 <core::fmt::Formatter::pad_integral::write_prefix::h8d718883a8f5418a> @ imm = #0x176
+ 800051a:      	cbz	r0, 0x800053a <core::fmt::num::imp::<impl core::fmt::Display for u32>::fmt::hfbddbb8be9010143+0x162> @ imm = #0x1c
+ 800051c:      	movs	r4, #0x1
+ 800051e:      	b	0x8000574 <core::fmt::num::imp::<impl core::fmt::Display for u32>::fmt::hfbddbb8be9010143+0x19c> @ imm = #0x52
+ 8000520:      	ldr	r2, [sp, #0x10]
+ 8000522:      	mov	r0, r11
+ 8000524:      	mov	r1, r10
+ 8000526:      	bl	0x8000690 <core::fmt::Formatter::pad_integral::write_prefix::h8d718883a8f5418a> @ imm = #0x166
+ 800052a:      	cmp	r0, #0x0
+ 800052c:      	bne	0x800061e <core::fmt::num::imp::<impl core::fmt::Display for u32>::fmt::hfbddbb8be9010143+0x246> @ imm = #0xee
+ 800052e:      	ldrd	r0, r1, [r11, #24]
+ 8000532:      	ldr	r3, [r1, #0xc]
+ 8000534:      	mov	r1, r5
+ 8000536:      	ldr	r2, [sp, #0xc]
+ 8000538:      	b	0x8000544 <core::fmt::num::imp::<impl core::fmt::Display for u32>::fmt::hfbddbb8be9010143+0x16c> @ imm = #0x8
+ 800053a:      	ldrd	r0, r1, [r11, #24]
+ 800053e:      	mov	r2, r4
+ 8000540:      	ldr	r3, [r1, #0xc]
+ 8000542:      	mov	r1, r9
+ 8000544:      	blx	r3
+ 8000546:      	mov	r4, r0
+ 8000548:      	mov	r0, r4
+ 800054a:      	add	sp, #0x3c
+ 800054c:      	pop.w	{r8, r9, r10, r11}
+ 8000550:      	pop	{r4, r5, r6, r7, pc}
+ 8000552:      	ldr	r2, [sp, #0x10]
+ 8000554:      	movs	r0, #0x30
+ 8000556:      	ldrb.w	r1, [r11, #0x20]
+ 800055a:      	movs	r4, #0x1
+ 800055c:      	ldr.w	r5, [r11, #0x4]
+ 8000560:      	str	r1, [sp, #0x4]
+ 8000562:      	mov	r1, r10
+ 8000564:      	str.w	r0, [r11, #0x4]
+ 8000568:      	mov	r0, r11
+ 800056a:      	strb.w	r4, [r11, #0x20]
+ 800056e:      	bl	0x8000690 <core::fmt::Formatter::pad_integral::write_prefix::h8d718883a8f5418a> @ imm = #0x11e
+ 8000572:      	cbz	r0, 0x800057e <core::fmt::num::imp::<impl core::fmt::Display for u32>::fmt::hfbddbb8be9010143+0x1a6> @ imm = #0x8
+ 8000574:      	mov	r0, r4
+ 8000576:      	add	sp, #0x3c
+ 8000578:      	pop.w	{r8, r9, r10, r11}
+ 800057c:      	pop	{r4, r5, r6, r7, pc}
+ 800057e:      	add.w	r0, r6, r9
+ 8000582:      	mov	r10, r5
+ 8000584:      	sub.w	r0, r0, r8
+ 8000588:      	ldrd	r4, r5, [r11, #24]
+ 800058c:      	ldr.w	r8, [sp, #0xc]
+ 8000590:      	sub.w	r6, r0, #0x26
+ 8000594:      	subs	r6, #0x1
+ 8000596:      	beq	0x8000612 <core::fmt::num::imp::<impl core::fmt::Display for u32>::fmt::hfbddbb8be9010143+0x23a> @ imm = #0x78
+ 8000598:      	ldr	r2, [r5, #0x10]
+ 800059a:      	mov	r0, r4
+ 800059c:      	movs	r1, #0x30
+ 800059e:      	blx	r2
+ 80005a0:      	cmp	r0, #0x0
+ 80005a2:      	beq	0x8000594 <core::fmt::num::imp::<impl core::fmt::Display for u32>::fmt::hfbddbb8be9010143+0x1bc> @ imm = #-0x12
+ 80005a4:      	b	0x800061e <core::fmt::num::imp::<impl core::fmt::Display for u32>::fmt::hfbddbb8be9010143+0x246> @ imm = #0x76
+ 80005a6:      	movs	r1, #0x0
+ 80005a8:      	mov	r5, r0
+ 80005aa:      	b	0x80005b2 <core::fmt::num::imp::<impl core::fmt::Display for u32>::fmt::hfbddbb8be9010143+0x1da> @ imm = #0x4
+ 80005ac:      	lsrs	r1, r0, #0x1
+ 80005ae:      	adds	r0, #0x1
+ 80005b0:      	lsrs	r5, r0, #0x1
+ 80005b2:      	ldr.w	r6, [r11, #0x4]
+ 80005b6:      	adds	r4, r1, #0x1
+ 80005b8:      	ldrd	r9, r8, [r11, #24]
+ 80005bc:      	subs	r4, #0x1
+ 80005be:      	beq	0x80005d0 <core::fmt::num::imp::<impl core::fmt::Display for u32>::fmt::hfbddbb8be9010143+0x1f8> @ imm = #0xe
+ 80005c0:      	ldr.w	r2, [r8, #0x10]
+ 80005c4:      	mov	r0, r9
+ 80005c6:      	mov	r1, r6
+ 80005c8:      	blx	r2
+ 80005ca:      	cmp	r0, #0x0
+ 80005cc:      	beq	0x80005bc <core::fmt::num::imp::<impl core::fmt::Display for u32>::fmt::hfbddbb8be9010143+0x1e4> @ imm = #-0x14
+ 80005ce:      	b	0x800061e <core::fmt::num::imp::<impl core::fmt::Display for u32>::fmt::hfbddbb8be9010143+0x246> @ imm = #0x4c
+ 80005d0:      	subs.w	r4, r6, #0x110000
+ 80005d4:      	it	ne
+ 80005d6:      	movne	r4, r5
+ 80005d8:      	cmp.w	r6, #0x110000
+ 80005dc:      	beq	0x800061e <core::fmt::num::imp::<impl core::fmt::Display for u32>::fmt::hfbddbb8be9010143+0x246> @ imm = #0x3e
+ 80005de:      	ldr	r2, [sp, #0x10]
+ 80005e0:      	mov	r0, r11
+ 80005e2:      	mov	r1, r10
+ 80005e4:      	bl	0x8000690 <core::fmt::Formatter::pad_integral::write_prefix::h8d718883a8f5418a> @ imm = #0xa8
+ 80005e8:      	cbnz	r0, 0x800061e <core::fmt::num::imp::<impl core::fmt::Display for u32>::fmt::hfbddbb8be9010143+0x246> @ imm = #0x32
+ 80005ea:      	ldr.w	r3, [r8, #0xc]
+ 80005ee:      	mov	r0, r9
+ 80005f0:      	ldrd	r1, r2, [sp, #8]
+ 80005f4:      	blx	r3
+ 80005f6:      	cbnz	r0, 0x800061e <core::fmt::num::imp::<impl core::fmt::Display for u32>::fmt::hfbddbb8be9010143+0x246> @ imm = #0x24
+ 80005f8:      	movs	r5, #0x0
+ 80005fa:      	cmp	r4, r5
+ 80005fc:      	beq	0x8000640 <core::fmt::num::imp::<impl core::fmt::Display for u32>::fmt::hfbddbb8be9010143+0x268> @ imm = #0x40
+ 80005fe:      	ldr.w	r2, [r8, #0x10]
+ 8000602:      	mov	r0, r9
+ 8000604:      	mov	r1, r6
+ 8000606:      	blx	r2
+ 8000608:      	adds	r5, #0x1
+ 800060a:      	cmp	r0, #0x0
+ 800060c:      	beq	0x80005fa <core::fmt::num::imp::<impl core::fmt::Display for u32>::fmt::hfbddbb8be9010143+0x222> @ imm = #-0x16
+ 800060e:      	subs	r0, r5, #0x1
+ 8000610:      	b	0x8000642 <core::fmt::num::imp::<impl core::fmt::Display for u32>::fmt::hfbddbb8be9010143+0x26a> @ imm = #0x2e
+ 8000612:      	ldr	r3, [r5, #0xc]
+ 8000614:      	mov	r0, r4
+ 8000616:      	ldr	r1, [sp, #0x8]
+ 8000618:      	mov	r2, r8
+ 800061a:      	blx	r3
+ 800061c:      	cbz	r0, 0x800062a <core::fmt::num::imp::<impl core::fmt::Display for u32>::fmt::hfbddbb8be9010143+0x252> @ imm = #0xa
+ 800061e:      	movs	r4, #0x1
+ 8000620:      	mov	r0, r4
+ 8000622:      	add	sp, #0x3c
+ 8000624:      	pop.w	{r8, r9, r10, r11}
+ 8000628:      	pop	{r4, r5, r6, r7, pc}
+ 800062a:      	ldr	r0, [sp, #0x4]
+ 800062c:      	movs	r4, #0x0
+ 800062e:      	strb.w	r0, [r11, #0x20]
+ 8000632:      	str.w	r10, [r11, #0x4]
+ 8000636:      	mov	r0, r4
+ 8000638:      	add	sp, #0x3c
+ 800063a:      	pop.w	{r8, r9, r10, r11}
+ 800063e:      	pop	{r4, r5, r6, r7, pc}
+ 8000640:      	mov	r0, r4
+ 8000642:      	mov	r1, r4
+ 8000644:      	movs	r4, #0x0
+ 8000646:      	cmp	r0, r1
+ 8000648:      	it	lo
+ 800064a:      	movlo	r4, #0x1
+ 800064c:      	mov	r0, r4
+ 800064e:      	add	sp, #0x3c
+ 8000650:      	pop.w	{r8, r9, r10, r11}
+ 8000654:      	pop	{r4, r5, r6, r7, pc}
+
+08000656 <core::panicking::panic_fmt::h5468da843dc1007c>:
+ 8000656:      	push	{r7, lr}
+ 8000658:      	mov	r7, sp
+ 800065a:      	sub	sp, #0x10
+ 800065c:      	strd	r0, r1, [sp, #8]
+ 8000660:      	movw	r0, #0x12cc
+ 8000664:      	movt	r0, #0x800
+ 8000668:      	str	r0, [sp, #0x4]
+ 800066a:      	movw	r0, #0x13c4
+ 800066e:      	movt	r0, #0x800
+ 8000672:      	str	r0, [sp]
+ 8000674:      	mov	r0, sp
+ 8000676:      	bl	0x8000d48 <rust_begin_unwind> @ imm = #0x6ce
+ 800067a:      	trap
+
+0800067c <core::ptr::drop_in_place<&core::iter::adapters::copied::Copied<core::slice::iter::Iter<u8>>>::hc177dce5192381b9>:
+ 800067c:      	bx	lr
+
+0800067e <<T as core::any::Any>::type_id::h291bc4acd42b5a60>:
+ 800067e:      	movw	r0, #0x8ef6
+ 8000682:      	movw	r1, #0x799e
+ 8000686:      	movt	r0, #0x50fd
+ 800068a:      	movt	r1, #0xe3e6
+ 800068e:      	bx	lr
+
+08000690 <core::fmt::Formatter::pad_integral::write_prefix::h8d718883a8f5418a>:
+ 8000690:      	push	{r4, r5, r7, lr}
+ 8000692:      	add	r7, sp, #0x8
+ 8000694:      	mov	r4, r2
+ 8000696:      	mov	r5, r0
+ 8000698:      	cmp.w	r1, #0x110000
+ 800069c:      	beq	0x80006ac <core::fmt::Formatter::pad_integral::write_prefix::h8d718883a8f5418a+0x1c> @ imm = #0xc
+ 800069e:      	ldrd	r0, r2, [r5, #24]
+ 80006a2:      	ldr	r2, [r2, #0x10]
+ 80006a4:      	blx	r2
+ 80006a6:      	cbz	r0, 0x80006ac <core::fmt::Formatter::pad_integral::write_prefix::h8d718883a8f5418a+0x1c> @ imm = #0x2
+ 80006a8:      	movs	r0, #0x1
+ 80006aa:      	pop	{r4, r5, r7, pc}
+ 80006ac:      	cbz	r4, 0x80006be <core::fmt::Formatter::pad_integral::write_prefix::h8d718883a8f5418a+0x2e> @ imm = #0xe
+ 80006ae:      	ldrd	r0, r1, [r5, #24]
+ 80006b2:      	movs	r2, #0x0
+ 80006b4:      	ldr	r3, [r1, #0xc]
+ 80006b6:      	mov	r1, r4
+ 80006b8:      	pop.w	{r4, r5, r7, lr}
+ 80006bc:      	bx	r3
+ 80006be:      	movs	r0, #0x0
+ 80006c0:      	pop	{r4, r5, r7, pc}
+
+080006c2 <core::fmt::Formatter::pad::h5af7202c4eb8783b>:
+ 80006c2:      	push	{r4, r5, r6, r7, lr}
+ 80006c4:      	add	r7, sp, #0xc
+ 80006c6:      	push.w	{r8, r9, r10, r11}
+ 80006ca:      	sub	sp, #0x14
+ 80006cc:      	mov	r8, r1
+ 80006ce:      	ldr.w	lr, [r0, #0x8]
+ 80006d2:      	ldr	r1, [r0, #0x10]
+ 80006d4:      	mov	r9, r2
+ 80006d6:      	cmp.w	lr, #0x1
+ 80006da:      	bne	0x80006fe <core::fmt::Formatter::pad::h5af7202c4eb8783b+0x3c> @ imm = #0x20
+ 80006dc:      	cmp	r1, #0x1
+ 80006de:      	beq	0x8000704 <core::fmt::Formatter::pad::h5af7202c4eb8783b+0x42> @ imm = #0x22
+ 80006e0:      	ldr.w	r10, [r0, #0xc]
+ 80006e4:      	cmp.w	r9, #0x0
+ 80006e8:      	beq.w	0x8000b02 <core::fmt::Formatter::pad::h5af7202c4eb8783b+0x440> @ imm = #0x416
+ 80006ec:      	sub.w	r1, r9, #0x1
+ 80006f0:      	and	r4, r9, #0x3
+ 80006f4:      	cmp	r1, #0x3
+ 80006f6:      	bhs	0x80007da <core::fmt::Formatter::pad::h5af7202c4eb8783b+0x118> @ imm = #0xe0
+ 80006f8:      	movs	r2, #0x0
+ 80006fa:      	mov	r6, r8
+ 80006fc:      	b	0x8000a04 <core::fmt::Formatter::pad::h5af7202c4eb8783b+0x342> @ imm = #0x304
+ 80006fe:      	cmp	r1, #0x1
+ 8000700:      	bne.w	0x8000b08 <core::fmt::Formatter::pad::h5af7202c4eb8783b+0x446> @ imm = #0x404
+ 8000704:      	ldr	r6, [r0, #0x14]
+ 8000706:      	add.w	r12, r8, r9
+ 800070a:      	movs	r2, #0x0
+ 800070c:      	mov	r4, r8
+ 800070e:      	cmp	r6, #0x0
+ 8000710:      	beq	0x80007aa <core::fmt::Formatter::pad::h5af7202c4eb8783b+0xe8> @ imm = #0x96
+ 8000712:      	str	r0, [sp, #0x10]
+ 8000714:      	b	0x800074a <core::fmt::Formatter::pad::h5af7202c4eb8783b+0x88> @ imm = #0x32
+ 8000716:      	ldrb	r5, [r4], #1
+ 800071a:      	and	r8, r5, #0x3f
+ 800071e:      	mov.w	r5, #0x1c0000
+ 8000722:      	and.w	r1, r5, r1, lsl #18
+ 8000726:      	orr.w	r1, r1, r10, lsl #12
+ 800072a:      	orr.w	r1, r1, r11, lsl #6
+ 800072e:      	add	r1, r8
+ 8000730:      	mov	r8, r9
+ 8000732:      	mov	r9, lr
+ 8000734:      	mov	lr, r0
+ 8000736:      	ldr	r0, [sp, #0x10]
+ 8000738:      	cmp.w	r1, #0x110000
+ 800073c:      	beq.w	0x8000aea <core::fmt::Formatter::pad::h5af7202c4eb8783b+0x428> @ imm = #0x3aa
+ 8000740:      	subs	r1, r2, r3
+ 8000742:      	subs	r6, #0x1
+ 8000744:      	add.w	r2, r1, r4
+ 8000748:      	beq	0x80007aa <core::fmt::Formatter::pad::h5af7202c4eb8783b+0xe8> @ imm = #0x5e
+ 800074a:      	cmp	r4, r12
+ 800074c:      	beq.w	0x8000aea <core::fmt::Formatter::pad::h5af7202c4eb8783b+0x428> @ imm = #0x39a
+ 8000750:      	mov	r3, r4
+ 8000752:      	ldrsb	r1, [r4], #1
+ 8000756:      	cmp.w	r1, #0xffffffff
+ 800075a:      	bgt	0x8000740 <core::fmt::Formatter::pad::h5af7202c4eb8783b+0x7e> @ imm = #-0x1e
+ 800075c:      	cmp	r4, r12
+ 800075e:      	beq	0x8000770 <core::fmt::Formatter::pad::h5af7202c4eb8783b+0xae> @ imm = #0xe
+ 8000760:      	ldrb	r5, [r3, #0x1]
+ 8000762:      	adds	r4, r3, #0x2
+ 8000764:      	and	r10, r5, #0x3f
+ 8000768:      	uxtb	r1, r1
+ 800076a:      	cmp	r1, #0xe0
+ 800076c:      	blo	0x8000740 <core::fmt::Formatter::pad::h5af7202c4eb8783b+0x7e> @ imm = #-0x30
+ 800076e:      	b	0x800077c <core::fmt::Formatter::pad::h5af7202c4eb8783b+0xba> @ imm = #0xa
+ 8000770:      	mov.w	r10, #0x0
+ 8000774:      	mov	r4, r12
+ 8000776:      	uxtb	r1, r1
+ 8000778:      	cmp	r1, #0xe0
+ 800077a:      	blo	0x8000740 <core::fmt::Formatter::pad::h5af7202c4eb8783b+0x7e> @ imm = #-0x3e
+ 800077c:      	cmp	r4, r12
+ 800077e:      	beq	0x800078e <core::fmt::Formatter::pad::h5af7202c4eb8783b+0xcc> @ imm = #0xc
+ 8000780:      	ldrb	r5, [r4], #1
+ 8000784:      	and	r11, r5, #0x3f
+ 8000788:      	cmp	r1, #0xf0
+ 800078a:      	blo	0x8000740 <core::fmt::Formatter::pad::h5af7202c4eb8783b+0x7e> @ imm = #-0x4e
+ 800078c:      	b	0x8000798 <core::fmt::Formatter::pad::h5af7202c4eb8783b+0xd6> @ imm = #0x8
+ 800078e:      	mov.w	r11, #0x0
+ 8000792:      	mov	r4, r12
+ 8000794:      	cmp	r1, #0xf0
+ 8000796:      	blo	0x8000740 <core::fmt::Formatter::pad::h5af7202c4eb8783b+0x7e> @ imm = #-0x5a
+ 8000798:      	mov	r0, lr
+ 800079a:      	mov	lr, r9
+ 800079c:      	mov	r9, r8
+ 800079e:      	cmp	r4, r12
+ 80007a0:      	bne	0x8000716 <core::fmt::Formatter::pad::h5af7202c4eb8783b+0x54> @ imm = #-0x8e
+ 80007a2:      	mov.w	r8, #0x0
+ 80007a6:      	mov	r4, r12
+ 80007a8:      	b	0x800071e <core::fmt::Formatter::pad::h5af7202c4eb8783b+0x5c> @ imm = #-0x8e
+ 80007aa:      	cmp	r4, r12
+ 80007ac:      	beq.w	0x8000aea <core::fmt::Formatter::pad::h5af7202c4eb8783b+0x428> @ imm = #0x33a
+ 80007b0:      	mov	r1, r4
+ 80007b2:      	ldrsb	r3, [r1], #1
+ 80007b6:      	cmp.w	r3, #0xffffffff
+ 80007ba:      	ble	0x80007fc <core::fmt::Formatter::pad::h5af7202c4eb8783b+0x13a> @ imm = #0x3e
+ 80007bc:      	cmp	r2, #0x0
+ 80007be:      	beq.w	0x800095e <core::fmt::Formatter::pad::h5af7202c4eb8783b+0x29c> @ imm = #0x19c
+ 80007c2:      	cmp	r2, r9
+ 80007c4:      	bhs.w	0x8000958 <core::fmt::Formatter::pad::h5af7202c4eb8783b+0x296> @ imm = #0x190
+ 80007c8:      	ldrsb.w	r1, [r8, r2]
+ 80007cc:      	cmn.w	r1, #0x40
+ 80007d0:      	bge.w	0x800095e <core::fmt::Formatter::pad::h5af7202c4eb8783b+0x29c> @ imm = #0x18a
+ 80007d4:      	movs	r1, #0x0
+ 80007d6:      	movs	r2, #0x0
+ 80007d8:      	b	0x8000960 <core::fmt::Formatter::pad::h5af7202c4eb8783b+0x29e> @ imm = #0x184
+ 80007da:      	sub.w	r1, r9, #0x4
+ 80007de:      	bic	r2, r1, #0x3
+ 80007e2:      	movs	r1, #0x1
+ 80007e4:      	cmp	r2, #0xc
+ 80007e6:      	add.w	r1, r1, r2, lsr #2
+ 80007ea:      	and	r5, r1, #0x3
+ 80007ee:      	bhs	0x8000816 <core::fmt::Formatter::pad::h5af7202c4eb8783b+0x154> @ imm = #0x24
+ 80007f0:      	movs	r2, #0x0
+ 80007f2:      	mov	r6, r8
+ 80007f4:      	cmp	r5, #0x0
+ 80007f6:      	bne.w	0x800091c <core::fmt::Formatter::pad::h5af7202c4eb8783b+0x25a> @ imm = #0x122
+ 80007fa:      	b	0x8000a04 <core::fmt::Formatter::pad::h5af7202c4eb8783b+0x342> @ imm = #0x206
+ 80007fc:      	uxtb	r3, r3
+ 80007fe:      	cmp	r1, r12
+ 8000800:      	beq.w	0x80009b2 <core::fmt::Formatter::pad::h5af7202c4eb8783b+0x2f0> @ imm = #0x1ae
+ 8000804:      	ldrb	r5, [r4, #0x1]
+ 8000806:      	adds	r1, r4, #0x2
+ 8000808:      	and	r4, r5, #0x3f
+ 800080c:      	lsls	r6, r4, #0x6
+ 800080e:      	cmp	r3, #0xe0
+ 8000810:      	bhs.w	0x80009bc <core::fmt::Formatter::pad::h5af7202c4eb8783b+0x2fa> @ imm = #0x1a8
+ 8000814:      	b	0x80007bc <core::fmt::Formatter::pad::h5af7202c4eb8783b+0xfa> @ imm = #-0x5c
+ 8000816:      	bic	r1, r1, #0x3
+ 800081a:      	movs	r2, #0x0
+ 800081c:      	rsb.w	lr, r1, #0x0
+ 8000820:      	mov	r6, r8
+ 8000822:      	strd	r5, r4, [sp, #4]
+ 8000826:      	str.w	r8, [sp, #0xc]
+ 800082a:      	ldrb	r1, [r6], #16
+ 800082e:      	ldrb	r5, [r6, #-15]
+ 8000832:      	and	r1, r1, #0xc0
+ 8000836:      	ldrb	r3, [r6, #-14]
+ 800083a:      	cmp	r1, #0x80
+ 800083c:      	ldrb	r12, [r6, #-13]
+ 8000840:      	and	r5, r5, #0xc0
+ 8000844:      	ldrb	r8, [r6, #-1]
+ 8000848:      	and	r3, r3, #0xc0
+ 800084c:      	ldrb	r11, [r6, #-2]
+ 8000850:      	it	ne
+ 8000852:      	addne	r2, #0x1
+ 8000854:      	ldrb	r1, [r6, #-3]
+ 8000858:      	cmp	r5, #0x80
+ 800085a:      	it	ne
+ 800085c:      	addne	r2, #0x1
+ 800085e:      	ldrb	r5, [r6, #-12]
+ 8000862:      	cmp	r3, #0x80
+ 8000864:      	it	ne
+ 8000866:      	addne	r2, #0x1
+ 8000868:      	and	r3, r12, #0xc0
+ 800086c:      	ldrb	r4, [r6, #-11]
+ 8000870:      	cmp	r3, #0x80
+ 8000872:      	it	ne
+ 8000874:      	addne	r2, #0x1
+ 8000876:      	and	r3, r5, #0xc0
+ 800087a:      	ldrb	r5, [r6, #-10]
+ 800087e:      	cmp	r3, #0x80
+ 8000880:      	it	ne
+ 8000882:      	addne	r2, #0x1
+ 8000884:      	and	r3, r4, #0xc0
+ 8000888:      	ldrb	r4, [r6, #-9]
+ 800088c:      	cmp	r3, #0x80
+ 800088e:      	it	ne
+ 8000890:      	addne	r2, #0x1
+ 8000892:      	and	r3, r5, #0xc0
+ 8000896:      	ldrb	r5, [r6, #-8]
+ 800089a:      	cmp	r3, #0x80
+ 800089c:      	it	ne
+ 800089e:      	addne	r2, #0x1
+ 80008a0:      	and	r3, r4, #0xc0
+ 80008a4:      	ldrb	r4, [r6, #-7]
+ 80008a8:      	cmp	r3, #0x80
+ 80008aa:      	it	ne
+ 80008ac:      	addne	r2, #0x1
+ 80008ae:      	and	r3, r5, #0xc0
+ 80008b2:      	ldrb	r5, [r6, #-6]
+ 80008b6:      	cmp	r3, #0x80
+ 80008b8:      	it	ne
+ 80008ba:      	addne	r2, #0x1
+ 80008bc:      	and	r3, r4, #0xc0
+ 80008c0:      	ldrb	r4, [r6, #-4]
+ 80008c4:      	cmp	r3, #0x80
+ 80008c6:      	it	ne
+ 80008c8:      	addne	r2, #0x1
+ 80008ca:      	and	r3, r5, #0xc0
+ 80008ce:      	ldrb	r5, [r6, #-5]
+ 80008d2:      	cmp	r3, #0x80
+ 80008d4:      	it	ne
+ 80008d6:      	addne	r2, #0x1
+ 80008d8:      	and	r3, r5, #0xc0
+ 80008dc:      	and	r1, r1, #0xc0
+ 80008e0:      	cmp	r3, #0x80
+ 80008e2:      	and	r3, r4, #0xc0
+ 80008e6:      	it	ne
+ 80008e8:      	addne	r2, #0x1
+ 80008ea:      	cmp	r3, #0x80
+ 80008ec:      	it	ne
+ 80008ee:      	addne	r2, #0x1
+ 80008f0:      	cmp	r1, #0x80
+ 80008f2:      	and	r1, r11, #0xc0
+ 80008f6:      	it	ne
+ 80008f8:      	addne	r2, #0x1
+ 80008fa:      	cmp	r1, #0x80
+ 80008fc:      	and	r1, r8, #0xc0
+ 8000900:      	it	ne
+ 8000902:      	addne	r2, #0x1
+ 8000904:      	cmp	r1, #0x80
+ 8000906:      	it	ne
+ 8000908:      	addne	r2, #0x1
+ 800090a:      	adds.w	lr, lr, #0x4
+ 800090e:      	bne	0x800082a <core::fmt::Formatter::pad::h5af7202c4eb8783b+0x168> @ imm = #-0xe8
+ 8000910:      	ldr.w	r8, [sp, #0xc]
+ 8000914:      	ldrd	r5, r4, [sp, #4]
+ 8000918:      	cmp	r5, #0x0
+ 800091a:      	beq	0x8000a04 <core::fmt::Formatter::pad::h5af7202c4eb8783b+0x342> @ imm = #0xe6
+ 800091c:      	ldrb	r1, [r6]
+ 800091e:      	ldrb	r3, [r6, #0x1]
+ 8000920:      	and	r1, r1, #0xc0
+ 8000924:      	ldrb.w	lr, [r6, #0x2]
+ 8000928:      	cmp	r1, #0x80
+ 800092a:      	ldrb.w	r12, [r6, #0x3]
+ 800092e:      	and	r1, r3, #0xc0
+ 8000932:      	it	ne
+ 8000934:      	addne	r2, #0x1
+ 8000936:      	cmp	r1, #0x80
+ 8000938:      	and	r1, lr, #0xc0
+ 800093c:      	it	ne
+ 800093e:      	addne	r2, #0x1
+ 8000940:      	cmp	r1, #0x80
+ 8000942:      	and	r1, r12, #0xc0
+ 8000946:      	it	ne
+ 8000948:      	addne	r2, #0x1
+ 800094a:      	cmp	r1, #0x80
+ 800094c:      	it	ne
+ 800094e:      	addne	r2, #0x1
+ 8000950:      	cmp	r5, #0x1
+ 8000952:      	bne	0x8000976 <core::fmt::Formatter::pad::h5af7202c4eb8783b+0x2b4> @ imm = #0x20
+ 8000954:      	adds	r6, #0x4
+ 8000956:      	b	0x8000a04 <core::fmt::Formatter::pad::h5af7202c4eb8783b+0x342> @ imm = #0xaa
+ 8000958:      	cmp	r2, r9
+ 800095a:      	bne.w	0x80007d4 <core::fmt::Formatter::pad::h5af7202c4eb8783b+0x112> @ imm = #-0x18a
+ 800095e:      	mov	r1, r8
+ 8000960:      	cmp	r1, #0x0
+ 8000962:      	ite	eq
+ 8000964:      	moveq	r2, r9
+ 8000966:      	movne	r8, r1
+ 8000968:      	cmp.w	lr, #0x1
+ 800096c:      	beq.w	0x8000af4 <core::fmt::Formatter::pad::h5af7202c4eb8783b+0x432> @ imm = #0x184
+ 8000970:      	ldrd	r1, r0, [r0, #24]
+ 8000974:      	b	0x8000b0e <core::fmt::Formatter::pad::h5af7202c4eb8783b+0x44c> @ imm = #0x196
+ 8000976:      	ldrb	r1, [r6, #0x4]
+ 8000978:      	ldrb	r3, [r6, #0x5]
+ 800097a:      	and	r1, r1, #0xc0
+ 800097e:      	ldrb.w	lr, [r6, #0x6]
+ 8000982:      	cmp	r1, #0x80
+ 8000984:      	ldrb.w	r12, [r6, #0x7]
+ 8000988:      	and	r1, r3, #0xc0
+ 800098c:      	it	ne
+ 800098e:      	addne	r2, #0x1
+ 8000990:      	cmp	r1, #0x80
+ 8000992:      	and	r1, lr, #0xc0
+ 8000996:      	it	ne
+ 8000998:      	addne	r2, #0x1
+ 800099a:      	cmp	r1, #0x80
+ 800099c:      	and	r1, r12, #0xc0
+ 80009a0:      	it	ne
+ 80009a2:      	addne	r2, #0x1
+ 80009a4:      	cmp	r1, #0x80
+ 80009a6:      	it	ne
+ 80009a8:      	addne	r2, #0x1
+ 80009aa:      	cmp	r5, #0x2
+ 80009ac:      	bne	0x80009d0 <core::fmt::Formatter::pad::h5af7202c4eb8783b+0x30e> @ imm = #0x20
+ 80009ae:      	adds	r6, #0x8
+ 80009b0:      	b	0x8000a04 <core::fmt::Formatter::pad::h5af7202c4eb8783b+0x342> @ imm = #0x50
+ 80009b2:      	movs	r6, #0x0
+ 80009b4:      	mov	r1, r12
+ 80009b6:      	cmp	r3, #0xe0
+ 80009b8:      	blo.w	0x80007bc <core::fmt::Formatter::pad::h5af7202c4eb8783b+0xfa> @ imm = #-0x200
+ 80009bc:      	cmp	r1, r12
+ 80009be:      	beq	0x8000abc <core::fmt::Formatter::pad::h5af7202c4eb8783b+0x3fa> @ imm = #0xfa
+ 80009c0:      	ldrb	r4, [r1], #1
+ 80009c4:      	and	r4, r4, #0x3f
+ 80009c8:      	cmp	r3, #0xf0
+ 80009ca:      	blo.w	0x80007bc <core::fmt::Formatter::pad::h5af7202c4eb8783b+0xfa> @ imm = #-0x212
+ 80009ce:      	b	0x8000ac6 <core::fmt::Formatter::pad::h5af7202c4eb8783b+0x404> @ imm = #0xf4
+ 80009d0:      	ldrb	r1, [r6, #0x8]
+ 80009d2:      	ldrb	r3, [r6, #0x9]
+ 80009d4:      	and	r1, r1, #0xc0
+ 80009d8:      	ldrb	r5, [r6, #0xa]
+ 80009da:      	ldrb.w	r12, [r6, #0xb]
+ 80009de:      	cmp	r1, #0x80
+ 80009e0:      	it	ne
+ 80009e2:      	addne	r2, #0x1
+ 80009e4:      	and	r1, r3, #0xc0
+ 80009e8:      	cmp	r1, #0x80
+ 80009ea:      	it	ne
+ 80009ec:      	addne	r2, #0x1
+ 80009ee:      	and	r1, r5, #0xc0
+ 80009f2:      	adds	r6, #0xc
+ 80009f4:      	cmp	r1, #0x80
+ 80009f6:      	it	ne
+ 80009f8:      	addne	r2, #0x1
+ 80009fa:      	and	r1, r12, #0xc0
+ 80009fe:      	cmp	r1, #0x80
+ 8000a00:      	it	ne
+ 8000a02:      	addne	r2, #0x1
+ 8000a04:      	cbz	r4, 0x8000a32 <core::fmt::Formatter::pad::h5af7202c4eb8783b+0x370> @ imm = #0x2a
+ 8000a06:      	ldrb	r1, [r6]
+ 8000a08:      	and	r1, r1, #0xc0
+ 8000a0c:      	cmp	r1, #0x80
+ 8000a0e:      	it	ne
+ 8000a10:      	addne	r2, #0x1
+ 8000a12:      	cmp	r4, #0x1
+ 8000a14:      	beq	0x8000a32 <core::fmt::Formatter::pad::h5af7202c4eb8783b+0x370> @ imm = #0x1a
+ 8000a16:      	ldrb	r1, [r6, #0x1]
+ 8000a18:      	and	r1, r1, #0xc0
+ 8000a1c:      	cmp	r1, #0x80
+ 8000a1e:      	it	ne
+ 8000a20:      	addne	r2, #0x1
+ 8000a22:      	cmp	r4, #0x2
+ 8000a24:      	beq	0x8000a32 <core::fmt::Formatter::pad::h5af7202c4eb8783b+0x370> @ imm = #0xa
+ 8000a26:      	ldrb	r1, [r6, #0x2]
+ 8000a28:      	and	r1, r1, #0xc0
+ 8000a2c:      	cmp	r1, #0x80
+ 8000a2e:      	it	ne
+ 8000a30:      	addne	r2, #0x1
+ 8000a32:      	cmp	r10, r2
+ 8000a34:      	bls	0x8000b08 <core::fmt::Formatter::pad::h5af7202c4eb8783b+0x446> @ imm = #0xd0
+ 8000a36:      	ldrb.w	r3, [r0, #0x20]
+ 8000a3a:      	sub.w	r2, r10, r2
+ 8000a3e:      	subs	r1, r3, #0x3
+ 8000a40:      	it	ne
+ 8000a42:      	movne	r1, r3
+ 8000a44:      	lsls	r3, r1, #0x1e
+ 8000a46:      	str.w	r8, [sp, #0xc]
+ 8000a4a:      	beq	0x8000a58 <core::fmt::Formatter::pad::h5af7202c4eb8783b+0x396> @ imm = #0xa
+ 8000a4c:      	cmp	r1, #0x1
+ 8000a4e:      	bne	0x8000a5e <core::fmt::Formatter::pad::h5af7202c4eb8783b+0x39c> @ imm = #0xc
+ 8000a50:      	mov.w	r11, #0x0
+ 8000a54:      	mov	r1, r2
+ 8000a56:      	b	0x8000a66 <core::fmt::Formatter::pad::h5af7202c4eb8783b+0x3a4> @ imm = #0xc
+ 8000a58:      	movs	r1, #0x0
+ 8000a5a:      	mov	r11, r2
+ 8000a5c:      	b	0x8000a66 <core::fmt::Formatter::pad::h5af7202c4eb8783b+0x3a4> @ imm = #0x6
+ 8000a5e:      	lsrs	r1, r2, #0x1
+ 8000a60:      	adds	r2, #0x1
+ 8000a62:      	lsr.w	r11, r2, #0x1
+ 8000a66:      	ldr	r6, [r0, #0x4]
+ 8000a68:      	adds	r4, r1, #0x1
+ 8000a6a:      	ldrd	r8, r5, [r0, #24]
+ 8000a6e:      	subs	r4, #0x1
+ 8000a70:      	beq	0x8000a80 <core::fmt::Formatter::pad::h5af7202c4eb8783b+0x3be> @ imm = #0xc
+ 8000a72:      	ldr	r2, [r5, #0x10]
+ 8000a74:      	mov	r0, r8
+ 8000a76:      	mov	r1, r6
+ 8000a78:      	blx	r2
+ 8000a7a:      	cmp	r0, #0x0
+ 8000a7c:      	beq	0x8000a6e <core::fmt::Formatter::pad::h5af7202c4eb8783b+0x3ac> @ imm = #-0x12
+ 8000a7e:      	b	0x8000a9a <core::fmt::Formatter::pad::h5af7202c4eb8783b+0x3d8> @ imm = #0x18
+ 8000a80:      	subs.w	r10, r6, #0x110000
+ 8000a84:      	it	ne
+ 8000a86:      	movne	r10, r11
+ 8000a88:      	cmp.w	r6, #0x110000
+ 8000a8c:      	beq	0x8000a9a <core::fmt::Formatter::pad::h5af7202c4eb8783b+0x3d8> @ imm = #0xa
+ 8000a8e:      	ldr	r3, [r5, #0xc]
+ 8000a90:      	mov	r0, r8
+ 8000a92:      	ldr	r1, [sp, #0xc]
+ 8000a94:      	mov	r2, r9
+ 8000a96:      	blx	r3
+ 8000a98:      	cbz	r0, 0x8000aa4 <core::fmt::Formatter::pad::h5af7202c4eb8783b+0x3e2> @ imm = #0x8
+ 8000a9a:      	movs	r0, #0x1
+ 8000a9c:      	add	sp, #0x14
+ 8000a9e:      	pop.w	{r8, r9, r10, r11}
+ 8000aa2:      	pop	{r4, r5, r6, r7, pc}
+ 8000aa4:      	movs	r4, #0x0
+ 8000aa6:      	cmp	r10, r4
+ 8000aa8:      	beq	0x8000b20 <core::fmt::Formatter::pad::h5af7202c4eb8783b+0x45e> @ imm = #0x74
+ 8000aaa:      	ldr	r2, [r5, #0x10]
+ 8000aac:      	mov	r0, r8
+ 8000aae:      	mov	r1, r6
+ 8000ab0:      	blx	r2
+ 8000ab2:      	adds	r4, #0x1
+ 8000ab4:      	cmp	r0, #0x0
+ 8000ab6:      	beq	0x8000aa6 <core::fmt::Formatter::pad::h5af7202c4eb8783b+0x3e4> @ imm = #-0x14
+ 8000ab8:      	subs	r1, r4, #0x1
+ 8000aba:      	b	0x8000b22 <core::fmt::Formatter::pad::h5af7202c4eb8783b+0x460> @ imm = #0x64
+ 8000abc:      	movs	r4, #0x0
+ 8000abe:      	mov	r1, r12
+ 8000ac0:      	cmp	r3, #0xf0
+ 8000ac2:      	blo.w	0x80007bc <core::fmt::Formatter::pad::h5af7202c4eb8783b+0xfa> @ imm = #-0x30a
+ 8000ac6:      	orrs	r6, r4
+ 8000ac8:      	mov.w	r5, #0x1c0000
+ 8000acc:      	and.w	r3, r5, r3, lsl #18
+ 8000ad0:      	cmp	r1, r12
+ 8000ad2:      	itte	ne
+ 8000ad4:      	ldrbne	r1, [r1]
+ 8000ad6:      	andne	r1, r1, #0x3f
+ 8000ada:      	moveq	r1, #0x0
+ 8000adc:      	orr.w	r3, r3, r6, lsl #6
+ 8000ae0:      	add	r1, r3
+ 8000ae2:      	cmp.w	r1, #0x110000
+ 8000ae6:      	bne.w	0x80007bc <core::fmt::Formatter::pad::h5af7202c4eb8783b+0xfa> @ imm = #-0x32e
+ 8000aea:      	mov	r2, r9
+ 8000aec:      	cmp.w	lr, #0x1
+ 8000af0:      	bne.w	0x8000970 <core::fmt::Formatter::pad::h5af7202c4eb8783b+0x2ae> @ imm = #-0x184
+ 8000af4:      	mov	r9, r2
+ 8000af6:      	ldr.w	r10, [r0, #0xc]
+ 8000afa:      	cmp.w	r9, #0x0
+ 8000afe:      	bne.w	0x80006ec <core::fmt::Formatter::pad::h5af7202c4eb8783b+0x2a> @ imm = #-0x416
+ 8000b02:      	movs	r2, #0x0
+ 8000b04:      	cmp	r10, r2
+ 8000b06:      	bhi	0x8000a36 <core::fmt::Formatter::pad::h5af7202c4eb8783b+0x374> @ imm = #-0xd4
+ 8000b08:      	ldr	r1, [r0, #0x18]
+ 8000b0a:      	mov	r2, r9
+ 8000b0c:      	ldr	r0, [r0, #0x1c]
+ 8000b0e:      	ldr	r3, [r0, #0xc]
+ 8000b10:      	mov	r0, r1
+ 8000b12:      	mov	r1, r8
+ 8000b14:      	add	sp, #0x14
+ 8000b16:      	pop.w	{r8, r9, r10, r11}
+ 8000b1a:      	pop.w	{r4, r5, r6, r7, lr}
+ 8000b1e:      	bx	r3
+ 8000b20:      	mov	r1, r10
+ 8000b22:      	movs	r0, #0x0
+ 8000b24:      	cmp	r1, r10
+ 8000b26:      	it	lo
+ 8000b28:      	movlo	r0, #0x1
+ 8000b2a:      	add	sp, #0x14
+ 8000b2c:      	pop.w	{r8, r9, r10, r11}
+ 8000b30:      	pop	{r4, r5, r6, r7, pc}
+
+08000b32 <core::panicking::panic::h322418c4dc3a4e35>:
+ 8000b32:      	push	{r7, lr}
+ 8000b34:      	mov	r7, sp
+ 8000b36:      	sub	sp, #0x20
+ 8000b38:      	mov	r1, r0
+ 8000b3a:      	movs	r0, #0x0
+ 8000b3c:      	str	r0, [sp, #0x14]
+ 8000b3e:      	movw	r2, #0x13c4
+ 8000b42:      	strd	r0, r0, [sp, #8]
+ 8000b46:      	movs	r0, #0x1
+ 8000b48:      	str	r0, [sp, #0x4]
+ 8000b4a:      	add	r0, sp, #0x18
+ 8000b4c:      	str	r0, [sp]
+ 8000b4e:      	movs	r0, #0x2b
+ 8000b50:      	str	r0, [sp, #0x1c]
+ 8000b52:      	movw	r0, #0x1240
+ 8000b56:      	movt	r0, #0x800
+ 8000b5a:      	movt	r2, #0x800
+ 8000b5e:      	str	r0, [sp, #0x18]
+ 8000b60:      	mov	r0, sp
+ 8000b62:      	str	r2, [sp, #0x10]
+ 8000b64:      	bl	0x8000656 <core::panicking::panic_fmt::h5468da843dc1007c> @ imm = #-0x512
+ 8000b68:      	trap
+
+08000b6a <<&T as core::fmt::Display>::fmt::h1083155e25397f62>:
+ 8000b6a:      	mov	r3, r1
+ 8000b6c:      	ldrd	r1, r2, [r0]
+ 8000b70:      	mov	r0, r3
+ 8000b72:      	b.w	0x80006c2 <core::fmt::Formatter::pad::h5af7202c4eb8783b> @ imm = #-0x4b4
+
+08000b76 <core::fmt::write::h706ba0ed69d89af5>:
+ 8000b76:      	push	{r4, r5, r6, r7, lr}
+ 8000b78:      	add	r7, sp, #0xc
+ 8000b7a:      	push.w	{r8, r9, r10, r11}
+ 8000b7e:      	sub	sp, #0x2c
+ 8000b80:      	mov	r11, r2
+ 8000b82:      	movs	r2, #0x3
+ 8000b84:      	ldr.w	r10, [r11, #0x8]
+ 8000b88:      	strb.w	r2, [sp, #0x28]
+ 8000b8c:      	movs	r2, #0x20
+ 8000b8e:      	str	r2, [sp, #0xc]
+ 8000b90:      	movs	r2, #0x0
+ 8000b92:      	cmp.w	r10, #0x0
+ 8000b96:      	str	r2, [sp, #0x8]
+ 8000b98:      	str	r1, [sp, #0x24]
+ 8000b9a:      	str	r0, [sp, #0x20]
+ 8000b9c:      	str	r2, [sp, #0x18]
+ 8000b9e:      	str	r2, [sp, #0x10]
+ 8000ba0:      	beq	0x8000c7c <core::fmt::write::h706ba0ed69d89af5+0x106> @ imm = #0xd8
+ 8000ba2:      	ldr.w	r0, [r11, #0xc]
+ 8000ba6:      	cmp	r0, #0x0
+ 8000ba8:      	beq.w	0x8000cca <core::fmt::write::h706ba0ed69d89af5+0x154> @ imm = #0x11e
+ 8000bac:      	mvn	r1, #0x1f
+ 8000bb0:      	ldr.w	r9, [r11]
+ 8000bb4:      	add.w	r1, r1, r0, lsl #5
+ 8000bb8:      	lsls	r0, r0, #0x5
+ 8000bba:      	movs	r4, #0x0
+ 8000bbc:      	mov.w	r8, #0x0
+ 8000bc0:      	movs	r2, #0x1
+ 8000bc2:      	add.w	r1, r2, r1, lsr #5
+ 8000bc6:      	str	r1, [sp]
+ 8000bc8:      	str	r0, [sp, #0x4]
+ 8000bca:      	add.w	r0, r9, r8
+ 8000bce:      	ldr	r2, [r0, #0x4]
+ 8000bd0:      	cbz	r2, 0x8000be4 <core::fmt::write::h706ba0ed69d89af5+0x6e> @ imm = #0x10
+ 8000bd2:      	ldrd	r0, r3, [sp, #32]
+ 8000bd6:      	ldr.w	r1, [r9, r8]
+ 8000bda:      	ldr	r3, [r3, #0xc]
+ 8000bdc:      	blx	r3
+ 8000bde:      	cmp	r0, #0x0
+ 8000be0:      	bne.w	0x8000cec <core::fmt::write::h706ba0ed69d89af5+0x176> @ imm = #0x108
+ 8000be4:      	add.w	r0, r10, r8, lsl #2
+ 8000be8:      	ldr.w	r1, [r11, #0x10]
+ 8000bec:      	ldrd	r5, r6, [r0, #4]
+ 8000bf0:      	ldrd	r2, r3, [r0, #20]
+ 8000bf4:      	strd	r6, r5, [sp, #8]
+ 8000bf8:      	ldrb	r6, [r0, #0x1c]
+ 8000bfa:      	strb.w	r6, [sp, #0x28]
+ 8000bfe:      	cbz	r2, 0x8000c20 <core::fmt::write::h706ba0ed69d89af5+0xaa> @ imm = #0x1e
+ 8000c00:      	cmp	r2, #0x1
+ 8000c02:      	bne	0x8000c16 <core::fmt::write::h706ba0ed69d89af5+0xa0> @ imm = #0x10
+ 8000c04:      	add.w	r2, r1, r3, lsl #3
+ 8000c08:      	movw	r6, #0x3d5
+ 8000c0c:      	movt	r6, #0x800
+ 8000c10:      	ldr	r2, [r2, #0x4]
+ 8000c12:      	cmp	r2, r6
+ 8000c14:      	beq	0x8000c1a <core::fmt::write::h706ba0ed69d89af5+0xa4> @ imm = #0x2
+ 8000c16:      	movs	r5, #0x0
+ 8000c18:      	b	0x8000c22 <core::fmt::write::h706ba0ed69d89af5+0xac> @ imm = #0x6
+ 8000c1a:      	ldr.w	r2, [r1, r3, lsl #3]
+ 8000c1e:      	ldr	r3, [r2]
+ 8000c20:      	movs	r5, #0x1
+ 8000c22:      	add.w	r2, r10, r4
+ 8000c26:      	strd	r5, r3, [sp, #16]
+ 8000c2a:      	ldr	r3, [r0, #0xc]
+ 8000c2c:      	ldr	r0, [r2, #0x10]
+ 8000c2e:      	cbz	r3, 0x8000c50 <core::fmt::write::h706ba0ed69d89af5+0xda> @ imm = #0x1e
+ 8000c30:      	cmp	r3, #0x1
+ 8000c32:      	bne	0x8000c46 <core::fmt::write::h706ba0ed69d89af5+0xd0> @ imm = #0x10
+ 8000c34:      	add.w	r3, r1, r0, lsl #3
+ 8000c38:      	movw	r6, #0x3d5
+ 8000c3c:      	movt	r6, #0x800
+ 8000c40:      	ldr	r3, [r3, #0x4]
+ 8000c42:      	cmp	r3, r6
+ 8000c44:      	beq	0x8000c4a <core::fmt::write::h706ba0ed69d89af5+0xd4> @ imm = #0x2
+ 8000c46:      	movs	r3, #0x0
+ 8000c48:      	b	0x8000c52 <core::fmt::write::h706ba0ed69d89af5+0xdc> @ imm = #0x6
+ 8000c4a:      	ldr.w	r0, [r1, r0, lsl #3]
+ 8000c4e:      	ldr	r0, [r0]
+ 8000c50:      	movs	r3, #0x1
+ 8000c52:      	ldr	r2, [r2]
+ 8000c54:      	str	r0, [sp, #0x1c]
+ 8000c56:      	ldr.w	r0, [r1, r2, lsl #3]
+ 8000c5a:      	add.w	r1, r1, r2, lsl #3
+ 8000c5e:      	ldr	r2, [r1, #0x4]
+ 8000c60:      	add	r1, sp, #0x8
+ 8000c62:      	str	r3, [sp, #0x18]
+ 8000c64:      	blx	r2
+ 8000c66:      	cmp	r0, #0x0
+ 8000c68:      	bne	0x8000cec <core::fmt::write::h706ba0ed69d89af5+0x176> @ imm = #0x80
+ 8000c6a:      	ldr	r0, [sp, #0x4]
+ 8000c6c:      	adds	r4, #0x20
+ 8000c6e:      	add.w	r8, r8, #0x8
+ 8000c72:      	cmp	r0, r4
+ 8000c74:      	bne	0x8000bca <core::fmt::write::h706ba0ed69d89af5+0x54> @ imm = #-0xae
+ 8000c76:      	ldr.w	r9, [sp]
+ 8000c7a:      	b	0x8000cce <core::fmt::write::h706ba0ed69d89af5+0x158> @ imm = #0x50
+ 8000c7c:      	ldr.w	r0, [r11, #0x14]
+ 8000c80:      	cbz	r0, 0x8000cca <core::fmt::write::h706ba0ed69d89af5+0x154> @ imm = #0x46
+ 8000c82:      	mvn	r1, #0x7
+ 8000c86:      	add.w	r0, r1, r0, lsl #3
+ 8000c8a:      	ldr.w	r2, [r11]
+ 8000c8e:      	movs	r1, #0x1
+ 8000c90:      	ldr.w	r3, [r11, #0x10]
+ 8000c94:      	add.w	r5, r1, r0, lsr #3
+ 8000c98:      	adds	r6, r2, #0x4
+ 8000c9a:      	add.w	r8, sp, #0x8
+ 8000c9e:      	adds	r4, r3, #0x4
+ 8000ca0:      	mov	r9, r5
+ 8000ca2:      	ldr	r2, [r6]
+ 8000ca4:      	cbz	r2, 0x8000cb4 <core::fmt::write::h706ba0ed69d89af5+0x13e> @ imm = #0xc
+ 8000ca6:      	ldrd	r0, r3, [sp, #32]
+ 8000caa:      	ldr	r1, [r6, #-4]
+ 8000cae:      	ldr	r3, [r3, #0xc]
+ 8000cb0:      	blx	r3
+ 8000cb2:      	cbnz	r0, 0x8000cec <core::fmt::write::h706ba0ed69d89af5+0x176> @ imm = #0x36
+ 8000cb4:      	ldr	r0, [r4, #-4]
+ 8000cb8:      	mov	r1, r8
+ 8000cba:      	ldr	r2, [r4]
+ 8000cbc:      	blx	r2
+ 8000cbe:      	cbnz	r0, 0x8000cec <core::fmt::write::h706ba0ed69d89af5+0x176> @ imm = #0x2a
+ 8000cc0:      	adds	r4, #0x8
+ 8000cc2:      	adds	r6, #0x8
+ 8000cc4:      	subs	r5, #0x1
+ 8000cc6:      	bne	0x8000ca2 <core::fmt::write::h706ba0ed69d89af5+0x12c> @ imm = #-0x28
+ 8000cc8:      	b	0x8000cce <core::fmt::write::h706ba0ed69d89af5+0x158> @ imm = #0x2
+ 8000cca:      	mov.w	r9, #0x0
+ 8000cce:      	ldrd	r0, r1, [r11]
+ 8000cd2:      	movs	r2, #0x0
+ 8000cd4:      	cmp	r9, r1
+ 8000cd6:      	it	lo
+ 8000cd8:      	addlo.w	r2, r0, r9, lsl #3
+ 8000cdc:      	bhs	0x8000cf6 <core::fmt::write::h706ba0ed69d89af5+0x180> @ imm = #0x16
+ 8000cde:      	ldrd	r0, r3, [sp, #32]
+ 8000ce2:      	ldrd	r1, r2, [r2]
+ 8000ce6:      	ldr	r3, [r3, #0xc]
+ 8000ce8:      	blx	r3
+ 8000cea:      	cbz	r0, 0x8000cf6 <core::fmt::write::h706ba0ed69d89af5+0x180> @ imm = #0x8
+ 8000cec:      	movs	r0, #0x1
+ 8000cee:      	add	sp, #0x2c
+ 8000cf0:      	pop.w	{r8, r9, r10, r11}
+ 8000cf4:      	pop	{r4, r5, r6, r7, pc}
+ 8000cf6:      	movs	r0, #0x0
+ 8000cf8:      	add	sp, #0x2c
+ 8000cfa:      	pop.w	{r8, r9, r10, r11}
+ 8000cfe:      	pop	{r4, r5, r6, r7, pc}
+
+08000d00 <<&T as core::fmt::Display>::fmt::h36541be20ffb1583>:
+ 8000d00:      	push	{r4, r5, r6, r7, lr}
+ 8000d02:      	add	r7, sp, #0xc
+ 8000d04:      	push.w	{r8, r9, r11}
+ 8000d08:      	sub	sp, #0x18
+ 8000d0a:      	ldr.w	lr, [r0]
+ 8000d0e:      	mov	r2, sp
+ 8000d10:      	ldrd	r12, r1, [r1, #24]
+ 8000d14:      	mov	r3, r2
+ 8000d16:      	ldm.w	lr, {r0, r4, r5, r6, r8, r9}
+ 8000d1a:      	stm.w	r3, {r0, r4, r5, r6, r8, r9}
+ 8000d1e:      	mov	r0, r12
+ 8000d20:      	bl	0x8000b76 <core::fmt::write::h706ba0ed69d89af5> @ imm = #-0x1ae
+ 8000d24:      	add	sp, #0x18
+ 8000d26:      	pop.w	{r8, r9, r11}
+ 8000d2a:      	pop	{r4, r5, r6, r7, pc}
+
+08000d2c <<&T as core::fmt::Display>::fmt::h2561bc0ee1880a00>:
+ 8000d2c:      	ldr	r0, [r0]
+ 8000d2e:      	mov	r3, r1
+ 8000d30:      	ldrd	r1, r2, [r0]
+ 8000d34:      	mov	r0, r3
+ 8000d36:      	b.w	0x80006c2 <core::fmt::Formatter::pad::h5af7202c4eb8783b> @ imm = #-0x678
+
+08000d3a <ResetTrampoline>:
+;             fn trampoline() -> ! {
+ 8000d3a:      	push	{r7, lr}
+ 8000d3c:      	mov	r7, sp
+;                 unsafe { main() }
+ 8000d3e:      	bl	0x8000220 <main>        @ imm = #-0xb22
+ 8000d42:      	trap
+
+08000d44 <WWDG>:
+;     loop {
+ 8000d44:      	b	0x8000d44 <WWDG>        @ imm = #-0x4
+
+08000d46 <__pre_init>:
+; pub unsafe extern "C" fn DefaultPreInit() {}
+ 8000d46:      	bx	lr
+
+08000d48 <rust_begin_unwind>:
+; fn panic(info: &PanicInfo) -> ! {
+ 8000d48:      	push	{r7, lr}
+ 8000d4a:      	mov	r7, sp
+ 8000d4c:      	sub	sp, #0x30
+ 8000d4e:      	str	r0, [sp, #0x4]
+;     call_asm!(__cpsid());
+ 8000d50:      	bl	0x8001112 <__cpsid>     @ imm = #0x3be
+;     iprintln!(stim, "{}", info);
+ 8000d54:      	movw	r0, #0xd9b
+ 8000d58:      	movw	r1, #0x13c4
+;     iprintln!(stim, "{}", info);
+ 8000d5c:      	movt	r0, #0x800
+ 8000d60:      	add	r2, sp, #0x18
+ 8000d62:      	str	r0, [sp, #0xc]
+ 8000d64:      	add	r0, sp, #0x4
+ 8000d66:      	str	r0, [sp, #0x8]
+ 8000d68:      	mov.w	r0, #0xe0000000
+;     Port(port).write_fmt(args).ok();
+ 8000d6c:      	str	r0, [sp, #0x10]
+ 8000d6e:      	add	r0, sp, #0x10
+ 8000d70:      	str	r0, [sp, #0x14]
+ 8000d72:      	movs	r0, #0x1
+ 8000d74:      	str	r0, [sp, #0x2c]
+ 8000d76:      	add	r0, sp, #0x8
+ 8000d78:      	str	r0, [sp, #0x28]
+ 8000d7a:      	movs	r0, #0x0
+ 8000d7c:      	strd	r0, r0, [sp, #32]
+ 8000d80:      	movs	r0, #0x2
+ 8000d82:      	str	r0, [sp, #0x1c]
+ 8000d84:      	movw	r0, #0x13e0
+ 8000d88:      	movt	r0, #0x800
+ 8000d8c:      	movt	r1, #0x800
+ 8000d90:      	str	r0, [sp, #0x18]
+ 8000d92:      	add	r0, sp, #0x14
+ 8000d94:      	bl	0x8000b76 <core::fmt::write::h706ba0ed69d89af5> @ imm = #-0x222
+;     loop {
+ 8000d98:      	b	0x8000d98 <rust_begin_unwind+0x50> @ imm = #-0x4
+
+08000d9a <<&T as core::fmt::Display>::fmt::h2254ef128b83af05>:
+ 8000d9a:      	push	{r4, r5, r6, r7, lr}
+ 8000d9c:      	add	r7, sp, #0xc
+ 8000d9e:      	str	r8, [sp, #-4]!
+ 8000da2:      	sub	sp, #0x38
+ 8000da4:      	ldrd	r4, r5, [r1, #24]
+ 8000da8:      	movw	r1, #0x12dc
+ 8000dac:      	ldr	r3, [r5, #0xc]
+ 8000dae:      	movt	r1, #0x800
+ 8000db2:      	ldr.w	r8, [r0]
+ 8000db6:      	movs	r2, #0xc
+ 8000db8:      	mov	r0, r4
+ 8000dba:      	blx	r3
+ 8000dbc:      	cbz	r0, 0x8000dca <<&T as core::fmt::Display>::fmt::h2254ef128b83af05+0x30> @ imm = #0xa
+ 8000dbe:      	movs	r6, #0x1
+ 8000dc0:      	mov	r0, r6
+ 8000dc2:      	add	sp, #0x38
+ 8000dc4:      	ldr	r8, [sp], #4
+ 8000dc8:      	pop	{r4, r5, r6, r7, pc}
+ 8000dca:      	ldr.w	r0, [r8, #0x8]
+ 8000dce:      	cbz	r0, 0x8000ddc <<&T as core::fmt::Display>::fmt::h2254ef128b83af05+0x42> @ imm = #0xa
+ 8000dd0:      	str	r0, [sp, #0x4]
+ 8000dd2:      	movw	r0, #0xd01
+ 8000dd6:      	movt	r0, #0x800
+ 8000dda:      	b	0x8000e08 <<&T as core::fmt::Display>::fmt::h2254ef128b83af05+0x6e> @ imm = #0x2a
+ 8000ddc:      	ldrd	r6, r0, [r8]
+ 8000de0:      	ldr	r1, [r0, #0xc]
+ 8000de2:      	mov	r0, r6
+ 8000de4:      	blx	r1
+ 8000de6:      	movw	r2, #0xa91e
+ 8000dea:      	movt	r2, #0x7ef2
+ 8000dee:      	eors	r1, r2
+ 8000df0:      	movw	r2, #0xbcf4
+ 8000df4:      	movt	r2, #0xecc7
+ 8000df8:      	eors	r0, r2
+ 8000dfa:      	orrs	r0, r1
+ 8000dfc:      	bne	0x8000e38 <<&T as core::fmt::Display>::fmt::h2254ef128b83af05+0x9e> @ imm = #0x38
+ 8000dfe:      	movw	r0, #0xd2d
+ 8000e02:      	str	r6, [sp, #0x4]
+ 8000e04:      	movt	r0, #0x800
+ 8000e08:      	str	r0, [sp, #0xc]
+ 8000e0a:      	add	r0, sp, #0x4
+ 8000e0c:      	str	r0, [sp, #0x8]
+ 8000e0e:      	add	r0, sp, #0x8
+ 8000e10:      	str	r0, [sp, #0x30]
+ 8000e12:      	movs	r0, #0x0
+ 8000e14:      	str	r0, [sp, #0x2c]
+ 8000e16:      	add	r2, sp, #0x20
+ 8000e18:      	str	r0, [sp, #0x28]
+ 8000e1a:      	movs	r0, #0x2
+ 8000e1c:      	str	r0, [sp, #0x24]
+ 8000e1e:      	movw	r0, #0x12ec
+ 8000e22:      	movt	r0, #0x800
+ 8000e26:      	movs	r6, #0x1
+ 8000e28:      	str	r0, [sp, #0x20]
+ 8000e2a:      	mov	r0, r4
+ 8000e2c:      	mov	r1, r5
+ 8000e2e:      	str	r6, [sp, #0x34]
+ 8000e30:      	bl	0x8000b76 <core::fmt::write::h706ba0ed69d89af5> @ imm = #-0x2be
+ 8000e34:      	cmp	r0, #0x0
+ 8000e36:      	bne	0x8000dc0 <<&T as core::fmt::Display>::fmt::h2254ef128b83af05+0x26> @ imm = #-0x7a
+ 8000e38:      	ldr.w	r0, [r8, #0xc]
+ 8000e3c:      	movw	r1, #0x3d9
+ 8000e40:      	movt	r1, #0x800
+ 8000e44:      	add.w	r2, r0, #0xc
+ 8000e48:      	str	r1, [sp, #0x1c]
+ 8000e4a:      	strd	r1, r2, [sp, #20]
+ 8000e4e:      	add.w	r1, r0, #0x8
+ 8000e52:      	str	r1, [sp, #0x10]
+ 8000e54:      	movw	r1, #0xb6b
+ 8000e58:      	movt	r1, #0x800
+ 8000e5c:      	add	r2, sp, #0x20
+ 8000e5e:      	strd	r0, r1, [sp, #8]
+ 8000e62:      	add	r1, sp, #0x8
+ 8000e64:      	movs	r0, #0x3
+ 8000e66:      	str	r1, [sp, #0x30]
+ 8000e68:      	movs	r1, #0x0
+ 8000e6a:      	str	r0, [sp, #0x34]
+ 8000e6c:      	strd	r0, r1, [sp, #36]
+ 8000e70:      	movw	r0, #0x12b4
+ 8000e74:      	movt	r0, #0x800
+ 8000e78:      	str	r1, [sp, #0x2c]
+ 8000e7a:      	str	r0, [sp, #0x20]
+ 8000e7c:      	mov	r0, r4
+ 8000e7e:      	mov	r1, r5
+ 8000e80:      	bl	0x8000b76 <core::fmt::write::h706ba0ed69d89af5> @ imm = #-0x30e
+ 8000e84:      	mov	r6, r0
+ 8000e86:      	mov	r0, r6
+ 8000e88:      	add	sp, #0x38
+ 8000e8a:      	ldr	r8, [sp], #4
+ 8000e8e:      	pop	{r4, r5, r6, r7, pc}
+
+08000e90 <core::ptr::drop_in_place<&mut cortex_m::itm::Port>::h476f427109cb7748>:
+ 8000e90:      	bx	lr
+
+08000e92 <<&mut W as core::fmt::Write>::write_str::h6b29c08f95385faa>:
+ 8000e92:      	push	{r4, r5, r7, lr}
+ 8000e94:      	add	r7, sp, #0x8
+;         if len == 0 {
+ 8000e96:      	cmp	r2, #0x0
+ 8000e98:      	beq.w	0x8000f9e <<&mut W as core::fmt::Write>::write_str::h6b29c08f95385faa+0x10c> @ imm = #0x102
+ 8000e9c:      	ldr	r0, [r0]
+;         if ptr as usize % 2 == 1 {
+ 8000e9e:      	lsls	r3, r1, #0x1f
+ 8000ea0:      	ldr	r0, [r0]
+;         if ptr as usize % 2 == 1 {
+ 8000ea2:      	beq	0x8000ec6 <<&mut W as core::fmt::Write>::write_str::h6b29c08f95385faa+0x34> @ imm = #0x20
+ 8000ea4:      	ldr	r3, [r0]
+;             while !port.is_fifo_ready() {}
+ 8000ea6:      	lsls	r3, r3, #0x1f
+ 8000ea8:      	itttt	eq
+ 8000eaa:      	ldreq	r3, [r0]
+;             while !port.is_fifo_ready() {}
+ 8000eac:      	lslseq.w	r3, r3, #0x1f
+ 8000eb0:      	ldreq	r3, [r0]
+;             while !port.is_fifo_ready() {}
+ 8000eb2:      	lslseq.w	r3, r3, #0x1f
+ 8000eb6:      	bne	0x8000ebe <<&mut W as core::fmt::Write>::write_str::h6b29c08f95385faa+0x2c> @ imm = #0x4
+ 8000eb8:      	ldr	r3, [r0]
+;             while !port.is_fifo_ready() {}
+ 8000eba:      	lsls	r3, r3, #0x1f
+ 8000ebc:      	beq	0x8000ea4 <<&mut W as core::fmt::Write>::write_str::h6b29c08f95385faa+0x12> @ imm = #-0x1c
+;             port.write_u8(*ptr);
+ 8000ebe:      	ldrb	r3, [r1], #1
+;             len -= 1;
+ 8000ec2:      	subs	r2, #0x1
+ 8000ec4:      	strb	r3, [r0]
+;         if ptr as usize % 4 == 2 {
+ 8000ec6:      	and	r3, r1, #0x3
+ 8000eca:      	cmp	r3, #0x2
+ 8000ecc:      	bne	0x8000ef4 <<&mut W as core::fmt::Write>::write_str::h6b29c08f95385faa+0x62> @ imm = #0x24
+;             if len > 1 {
+ 8000ece:      	cmp	r2, #0x2
+ 8000ed0:      	blo	0x8000f7c <<&mut W as core::fmt::Write>::write_str::h6b29c08f95385faa+0xea> @ imm = #0xa8
+ 8000ed2:      	ldr	r3, [r0]
+;                 while !port.is_fifo_ready() {}
+ 8000ed4:      	lsls	r3, r3, #0x1f
+ 8000ed6:      	itttt	eq
+ 8000ed8:      	ldreq	r3, [r0]
+;                 while !port.is_fifo_ready() {}
+ 8000eda:      	lslseq.w	r3, r3, #0x1f
+ 8000ede:      	ldreq	r3, [r0]
+;                 while !port.is_fifo_ready() {}
+ 8000ee0:      	lslseq.w	r3, r3, #0x1f
+ 8000ee4:      	bne	0x8000eec <<&mut W as core::fmt::Write>::write_str::h6b29c08f95385faa+0x5a> @ imm = #0x4
+ 8000ee6:      	ldr	r3, [r0]
+;                 while !port.is_fifo_ready() {}
+ 8000ee8:      	lsls	r3, r3, #0x1f
+ 8000eea:      	beq	0x8000ed2 <<&mut W as core::fmt::Write>::write_str::h6b29c08f95385faa+0x40> @ imm = #-0x1c
+;                 port.write_u16(ptr::read(ptr as *const u16));
+ 8000eec:      	ldrh	r3, [r1], #2
+;                 len -= 2;
+ 8000ef0:      	subs	r2, #0x2
+ 8000ef2:      	strh	r3, [r0]
+;     if len == 0 {
+ 8000ef4:      	cmp	r2, #0x0
+ 8000ef6:      	beq	0x8000f9e <<&mut W as core::fmt::Write>::write_str::h6b29c08f95385faa+0x10c> @ imm = #0xa4
+;     let split = len & !0b11;
+ 8000ef8:      	bic	r12, r2, #0x3
+;         slice::from_raw_parts(buffer.as_ptr() as *const u32, split >> 2),
+ 8000efc:      	lsrs.w	lr, r2, #0x2
+ 8000f00:      	beq	0x8000f30 <<&mut W as core::fmt::Write>::write_str::h6b29c08f95385faa+0x9e> @ imm = #0x2c
+ 8000f02:      	movs	r3, #0x0
+ 8000f04:      	mov	r4, r1
+ 8000f06:      	b	0x8000f14 <<&mut W as core::fmt::Write>::write_str::h6b29c08f95385faa+0x82> @ imm = #0xa
+;         stim.write_u32(ptr::read(p));
+ 8000f08:      	ldr	r5, [r4], #4
+ 8000f0c:      	adds	r3, #0x1
+ 8000f0e:      	cmp	r3, lr
+ 8000f10:      	str	r5, [r0]
+ 8000f12:      	beq	0x8000f30 <<&mut W as core::fmt::Write>::write_str::h6b29c08f95385faa+0x9e> @ imm = #0x1a
+ 8000f14:      	ldr	r5, [r0]
+;         while !stim.is_fifo_ready() {}
+ 8000f16:      	lsls	r5, r5, #0x1f
+ 8000f18:      	itttt	eq
+ 8000f1a:      	ldreq	r5, [r0]
+;         while !stim.is_fifo_ready() {}
+ 8000f1c:      	lslseq.w	r5, r5, #0x1f
+ 8000f20:      	ldreq	r5, [r0]
+;         while !stim.is_fifo_ready() {}
+ 8000f22:      	lslseq.w	r5, r5, #0x1f
+ 8000f26:      	bne	0x8000f08 <<&mut W as core::fmt::Write>::write_str::h6b29c08f95385faa+0x76> @ imm = #-0x22
+ 8000f28:      	ldr	r5, [r0]
+;         while !stim.is_fifo_ready() {}
+ 8000f2a:      	lsls	r5, r5, #0x1f
+ 8000f2c:      	beq	0x8000f14 <<&mut W as core::fmt::Write>::write_str::h6b29c08f95385faa+0x82> @ imm = #-0x1c
+ 8000f2e:      	b	0x8000f08 <<&mut W as core::fmt::Write>::write_str::h6b29c08f95385faa+0x76> @ imm = #-0x2a
+;     let mut left = len & 0b11;
+ 8000f30:      	and	r2, r2, #0x3
+ 8000f34:      	add	r1, r12
+;     if left > 1 {
+ 8000f36:      	cmp	r2, #0x2
+ 8000f38:      	blo	0x8000f5c <<&mut W as core::fmt::Write>::write_str::h6b29c08f95385faa+0xca> @ imm = #0x20
+ 8000f3a:      	ldr	r3, [r0]
+;         while !port.is_fifo_ready() {}
+ 8000f3c:      	lsls	r3, r3, #0x1f
+ 8000f3e:      	itttt	eq
+ 8000f40:      	ldreq	r3, [r0]
+;         while !port.is_fifo_ready() {}
+ 8000f42:      	lslseq.w	r3, r3, #0x1f
+ 8000f46:      	ldreq	r3, [r0]
+;         while !port.is_fifo_ready() {}
+ 8000f48:      	lslseq.w	r3, r3, #0x1f
+ 8000f4c:      	bne	0x8000f54 <<&mut W as core::fmt::Write>::write_str::h6b29c08f95385faa+0xc2> @ imm = #0x4
+ 8000f4e:      	ldr	r3, [r0]
+;         while !port.is_fifo_ready() {}
+ 8000f50:      	lsls	r3, r3, #0x1f
+ 8000f52:      	beq	0x8000f3a <<&mut W as core::fmt::Write>::write_str::h6b29c08f95385faa+0xa8> @ imm = #-0x1c
+;         port.write_u16(ptr::read(ptr as *const u16));
+ 8000f54:      	ldrh	r3, [r1], #2
+;         left -= 2;
+ 8000f58:      	subs	r2, #0x2
+ 8000f5a:      	strh	r3, [r0]
+;     if left == 1 {
+ 8000f5c:      	cmp	r2, #0x1
+ 8000f5e:      	bne	0x8000f9e <<&mut W as core::fmt::Write>::write_str::h6b29c08f95385faa+0x10c> @ imm = #0x3c
+ 8000f60:      	ldr	r2, [r0]
+;         while !port.is_fifo_ready() {}
+ 8000f62:      	lsls	r2, r2, #0x1f
+ 8000f64:      	itttt	eq
+ 8000f66:      	ldreq	r2, [r0]
+;         while !port.is_fifo_ready() {}
+ 8000f68:      	lslseq.w	r2, r2, #0x1f
+ 8000f6c:      	ldreq	r2, [r0]
+;         while !port.is_fifo_ready() {}
+ 8000f6e:      	lslseq.w	r2, r2, #0x1f
+ 8000f72:      	bne	0x8000f9a <<&mut W as core::fmt::Write>::write_str::h6b29c08f95385faa+0x108> @ imm = #0x24
+ 8000f74:      	ldr	r2, [r0]
+;         while !port.is_fifo_ready() {}
+ 8000f76:      	lsls	r2, r2, #0x1f
+ 8000f78:      	beq	0x8000f60 <<&mut W as core::fmt::Write>::write_str::h6b29c08f95385faa+0xce> @ imm = #-0x1c
+ 8000f7a:      	b	0x8000f9a <<&mut W as core::fmt::Write>::write_str::h6b29c08f95385faa+0x108> @ imm = #0x1c
+;                 if len == 1 {
+ 8000f7c:      	cmp	r2, #0x1
+ 8000f7e:      	bne	0x8000f9e <<&mut W as core::fmt::Write>::write_str::h6b29c08f95385faa+0x10c> @ imm = #0x1c
+ 8000f80:      	ldr	r2, [r0]
+;                     while !port.is_fifo_ready() {}
+ 8000f82:      	lsls	r2, r2, #0x1f
+ 8000f84:      	bne	0x8000f9a <<&mut W as core::fmt::Write>::write_str::h6b29c08f95385faa+0x108> @ imm = #0x12
+ 8000f86:      	ldr	r2, [r0]
+;                     while !port.is_fifo_ready() {}
+ 8000f88:      	lsls	r2, r2, #0x1f
+ 8000f8a:      	itt	eq
+ 8000f8c:      	ldreq	r2, [r0]
+;                     while !port.is_fifo_ready() {}
+ 8000f8e:      	lslseq.w	r2, r2, #0x1f
+ 8000f92:      	bne	0x8000f9a <<&mut W as core::fmt::Write>::write_str::h6b29c08f95385faa+0x108> @ imm = #0x4
+ 8000f94:      	ldr	r2, [r0]
+;                     while !port.is_fifo_ready() {}
+ 8000f96:      	lsls	r2, r2, #0x1f
+ 8000f98:      	beq	0x8000f80 <<&mut W as core::fmt::Write>::write_str::h6b29c08f95385faa+0xee> @ imm = #-0x1c
+ 8000f9a:      	ldrb	r1, [r1]
+ 8000f9c:      	strb	r1, [r0]
+ 8000f9e:      	movs	r0, #0x0
+ 8000fa0:      	pop	{r4, r5, r7, pc}
+
+08000fa2 <<&mut W as core::fmt::Write>::write_char::h64cc6e21ce67cdd8>:
+ 8000fa2:      	push	{r4, r6, r7, lr}
+ 8000fa4:      	add	r7, sp, #0x8
+ 8000fa6:      	sub	sp, #0x4
+ 8000fa8:      	ldr	r0, [r0]
+ 8000faa:      	movs	r2, #0x0
+ 8000fac:      	cmp	r1, #0x80
+ 8000fae:      	str	r2, [sp]
+ 8000fb0:      	bhs	0x8000fc8 <<&mut W as core::fmt::Write>::write_char::h64cc6e21ce67cdd8+0x26> @ imm = #0x14
+ 8000fb2:      	strb.w	r1, [sp]
+ 8000fb6:      	movs	r1, #0x1
+ 8000fb8:      	mov.w	lr, #0x1
+ 8000fbc:      	ldr	r0, [r0]
+;     let split = len & !0b11;
+ 8000fbe:      	and	r12, lr, #0x4
+ 8000fc2:      	cmp	r1, #0x0
+ 8000fc4:      	bne	0x8001050 <<&mut W as core::fmt::Write>::write_char::h64cc6e21ce67cdd8+0xae> @ imm = #0x88
+ 8000fc6:      	b	0x80010b0 <<&mut W as core::fmt::Write>::write_char::h64cc6e21ce67cdd8+0x10e> @ imm = #0xe6
+ 8000fc8:      	cmp.w	r1, #0x800
+ 8000fcc:      	bhs	0x8000fe8 <<&mut W as core::fmt::Write>::write_char::h64cc6e21ce67cdd8+0x46> @ imm = #0x18
+ 8000fce:      	mov.w	lr, #0x2
+ 8000fd2:      	mov	r2, r1
+ 8000fd4:      	bfi	r2, lr, #6, #26
+ 8000fd8:      	strb.w	r2, [sp, #0x1]
+ 8000fdc:      	movs	r2, #0xc0
+ 8000fde:      	orr.w	r1, r2, r1, lsr #6
+ 8000fe2:      	strb.w	r1, [sp]
+ 8000fe6:      	b	0x8001012 <<&mut W as core::fmt::Write>::write_char::h64cc6e21ce67cdd8+0x70> @ imm = #0x28
+ 8000fe8:      	movs	r2, #0x2
+ 8000fea:      	mov	r3, r1
+ 8000fec:      	bfi	r3, r2, #6, #26
+ 8000ff0:      	cmp.w	r1, #0x10000
+ 8000ff4:      	bhs	0x8001020 <<&mut W as core::fmt::Write>::write_char::h64cc6e21ce67cdd8+0x7e> @ imm = #0x28
+ 8000ff6:      	strb.w	r3, [sp, #0x2]
+ 8000ffa:      	lsrs	r3, r1, #0x6
+ 8000ffc:      	bfi	r3, r2, #6, #26
+ 8001000:      	movs	r2, #0xe0
+ 8001002:      	orr.w	r1, r2, r1, lsr #12
+ 8001006:      	strb.w	r1, [sp]
+ 800100a:      	strb.w	r3, [sp, #0x1]
+ 800100e:      	mov.w	lr, #0x3
+ 8001012:      	movs	r1, #0x1
+ 8001014:      	ldr	r0, [r0]
+;     let split = len & !0b11;
+ 8001016:      	and	r12, lr, #0x4
+ 800101a:      	cmp	r1, #0x0
+ 800101c:      	beq	0x80010b0 <<&mut W as core::fmt::Write>::write_char::h64cc6e21ce67cdd8+0x10e> @ imm = #0x90
+ 800101e:      	b	0x8001050 <<&mut W as core::fmt::Write>::write_char::h64cc6e21ce67cdd8+0xae> @ imm = #0x2e
+ 8001020:      	strb.w	r3, [sp, #0x3]
+ 8001024:      	lsrs	r3, r1, #0x6
+ 8001026:      	bfi	r3, r2, #6, #26
+ 800102a:      	strb.w	r3, [sp, #0x2]
+ 800102e:      	lsrs	r3, r1, #0xc
+ 8001030:      	mov.w	lr, #0x4
+ 8001034:      	bfi	r3, r2, #6, #26
+ 8001038:      	movs	r2, #0xf0
+ 800103a:      	orr.w	r1, r2, r1, lsr #18
+ 800103e:      	strb.w	r1, [sp]
+ 8001042:      	movs	r1, #0x0
+ 8001044:      	strb.w	r3, [sp, #0x1]
+ 8001048:      	ldr	r0, [r0]
+;     let split = len & !0b11;
+ 800104a:      	and	r12, lr, #0x4
+ 800104e:      	cbz	r1, 0x80010b0 <<&mut W as core::fmt::Write>::write_char::h64cc6e21ce67cdd8+0x10e> @ imm = #0x5e
+ 8001050:      	mov	r1, sp
+;     let mut left = len & 0b11;
+ 8001052:      	and	r2, lr, #0x3
+ 8001056:      	add	r1, r12
+;     if left > 1 {
+ 8001058:      	cmp	r2, #0x2
+ 800105a:      	blo	0x8001088 <<&mut W as core::fmt::Write>::write_char::h64cc6e21ce67cdd8+0xe6> @ imm = #0x2a
+ 800105c:      	ldr	r3, [r0]
+;         while !port.is_fifo_ready() {}
+ 800105e:      	lsls	r3, r3, #0x1f
+ 8001060:      	itttt	eq
+ 8001062:      	ldreq	r3, [r0]
+;         while !port.is_fifo_ready() {}
+ 8001064:      	lslseq.w	r3, r3, #0x1f
+ 8001068:      	ldreq	r3, [r0]
+;         while !port.is_fifo_ready() {}
+ 800106a:      	lslseq.w	r3, r3, #0x1f
+ 800106e:      	bne	0x8001076 <<&mut W as core::fmt::Write>::write_char::h64cc6e21ce67cdd8+0xd4> @ imm = #0x4
+ 8001070:      	ldr	r3, [r0]
+;         while !port.is_fifo_ready() {}
+ 8001072:      	lsls	r3, r3, #0x1f
+ 8001074:      	beq	0x800105c <<&mut W as core::fmt::Write>::write_char::h64cc6e21ce67cdd8+0xba> @ imm = #-0x1c
+;         port.write_u16(ptr::read(ptr as *const u16));
+ 8001076:      	ldrh	r3, [r1], #2
+;         left -= 2;
+ 800107a:      	subs	r2, #0x2
+ 800107c:      	strh	r3, [r0]
+;     if left == 1 {
+ 800107e:      	cmp	r2, #0x1
+ 8001080:      	beq	0x800108c <<&mut W as core::fmt::Write>::write_char::h64cc6e21ce67cdd8+0xea> @ imm = #0x8
+ 8001082:      	movs	r0, #0x0
+ 8001084:      	add	sp, #0x4
+ 8001086:      	pop	{r4, r6, r7, pc}
+;     if left == 1 {
+ 8001088:      	cmp	r2, #0x1
+ 800108a:      	bne	0x8001082 <<&mut W as core::fmt::Write>::write_char::h64cc6e21ce67cdd8+0xe0> @ imm = #-0xc
+ 800108c:      	ldr	r2, [r0]
+;         while !port.is_fifo_ready() {}
+ 800108e:      	lsls	r2, r2, #0x1f
+ 8001090:      	itttt	eq
+ 8001092:      	ldreq	r2, [r0]
+;         while !port.is_fifo_ready() {}
+ 8001094:      	lslseq.w	r2, r2, #0x1f
+ 8001098:      	ldreq	r2, [r0]
+;         while !port.is_fifo_ready() {}
+ 800109a:      	lslseq.w	r2, r2, #0x1f
+ 800109e:      	bne	0x80010a6 <<&mut W as core::fmt::Write>::write_char::h64cc6e21ce67cdd8+0x104> @ imm = #0x4
+ 80010a0:      	ldr	r2, [r0]
+;         while !port.is_fifo_ready() {}
+ 80010a2:      	lsls	r2, r2, #0x1f
+ 80010a4:      	beq	0x800108c <<&mut W as core::fmt::Write>::write_char::h64cc6e21ce67cdd8+0xea> @ imm = #-0x1c
+ 80010a6:      	ldrb	r1, [r1]
+ 80010a8:      	strb	r1, [r0]
+ 80010aa:      	movs	r0, #0x0
+ 80010ac:      	add	sp, #0x4
+ 80010ae:      	pop	{r4, r6, r7, pc}
+ 80010b0:      	lsr.w	r3, lr, #0x2
+ 80010b4:      	movs	r1, #0x0
+ 80010b6:      	mov	r2, sp
+ 80010b8:      	b	0x80010c6 <<&mut W as core::fmt::Write>::write_char::h64cc6e21ce67cdd8+0x124> @ imm = #0xa
+;         stim.write_u32(ptr::read(p));
+ 80010ba:      	ldr	r4, [r2], #4
+ 80010be:      	adds	r1, #0x1
+ 80010c0:      	cmp	r1, r3
+ 80010c2:      	str	r4, [r0]
+ 80010c4:      	beq	0x8001050 <<&mut W as core::fmt::Write>::write_char::h64cc6e21ce67cdd8+0xae> @ imm = #-0x78
+ 80010c6:      	ldr	r4, [r0]
+;         while !stim.is_fifo_ready() {}
+ 80010c8:      	lsls	r4, r4, #0x1f
+ 80010ca:      	itttt	eq
+ 80010cc:      	ldreq	r4, [r0]
+;         while !stim.is_fifo_ready() {}
+ 80010ce:      	lslseq.w	r4, r4, #0x1f
+ 80010d2:      	ldreq	r4, [r0]
+;         while !stim.is_fifo_ready() {}
+ 80010d4:      	lslseq.w	r4, r4, #0x1f
+ 80010d8:      	bne	0x80010ba <<&mut W as core::fmt::Write>::write_char::h64cc6e21ce67cdd8+0x118> @ imm = #-0x22
+ 80010da:      	ldr	r4, [r0]
+;         while !stim.is_fifo_ready() {}
+ 80010dc:      	lsls	r4, r4, #0x1f
+ 80010de:      	beq	0x80010c6 <<&mut W as core::fmt::Write>::write_char::h64cc6e21ce67cdd8+0x124> @ imm = #-0x1c
+ 80010e0:      	b	0x80010ba <<&mut W as core::fmt::Write>::write_char::h64cc6e21ce67cdd8+0x118> @ imm = #-0x2a
+
+080010e2 <<&mut W as core::fmt::Write>::write_fmt::h7424fdc899cbb1ed>:
+ 80010e2:      	push	{r4, r5, r6, r7, lr}
+ 80010e4:      	add	r7, sp, #0xc
+ 80010e6:      	str	r11, [sp, #-4]!
+ 80010ea:      	sub	sp, #0x20
+ 80010ec:      	ldr	r0, [r0]
+ 80010ee:      	add	r2, sp, #0x8
+ 80010f0:      	str	r0, [sp, #0x4]
+ 80010f2:      	ldm.w	r1, {r3, r4, r5, r6, r12, lr}
+ 80010f6:      	mov	r0, r2
+ 80010f8:      	movw	r1, #0x13c4
+ 80010fc:      	movt	r1, #0x800
+ 8001100:      	stm.w	r0, {r3, r4, r5, r6, r12, lr}
+ 8001104:      	add	r0, sp, #0x4
+ 8001106:      	bl	0x8000b76 <core::fmt::write::h706ba0ed69d89af5> @ imm = #-0x594
+ 800110a:      	add	sp, #0x20
+ 800110c:      	ldr	r11, [sp], #4
+ 8001110:      	pop	{r4, r5, r6, r7, pc}
+
+08001112 <__cpsid>:
+ 8001112:      	cpsid i
+ 8001114:      	bx	lr
+
+08001116 <__cpsie>:
+ 8001116:      	cpsie i
+ 8001118:      	bx	lr
+
+0800111a <__primask_r>:
+ 800111a:      	mrs	r0, primask
+ 800111e:      	bx	lr
+
+08001120 <__aeabi_memcpy>:
+ 8001120:      	b.w	0x80011aa <memcpy>      @ imm = #0x86
+
+08001124 <__aeabi_memcpy4>:
+ 8001124:      	push	{r4, r5, r7, lr}
+ 8001126:      	add	r7, sp, #0x8
+ 8001128:      	cmp	r2, #0x4
+ 800112a:      	blo	0x8001190 <__aeabi_memcpy4+0x6c> @ imm = #0x62
+ 800112c:      	sub.w	r12, r2, #0x4
+ 8001130:      	movs	r3, #0x1
+ 8001132:      	add.w	r3, r3, r12, lsr #2
+ 8001136:      	ands	lr, r3, #0x3
+ 800113a:      	beq	0x800116c <__aeabi_memcpy4+0x48> @ imm = #0x2e
+ 800113c:      	mov	r3, r1
+ 800113e:      	mov	r4, r0
+ 8001140:      	ldr	r5, [r3], #4
+ 8001144:      	cmp.w	lr, #0x1
+ 8001148:      	str	r5, [r4], #4
+ 800114c:      	bne	0x800115c <__aeabi_memcpy4+0x38> @ imm = #0xc
+ 800114e:      	mov	r2, r12
+ 8001150:      	mov	r0, r4
+ 8001152:      	mov	r1, r3
+ 8001154:      	cmp.w	r12, #0xc
+ 8001158:      	bhs	0x8001172 <__aeabi_memcpy4+0x4e> @ imm = #0x16
+ 800115a:      	b	0x8001190 <__aeabi_memcpy4+0x6c> @ imm = #0x32
+ 800115c:      	ldr	r3, [r1, #0x4]
+ 800115e:      	cmp.w	lr, #0x2
+ 8001162:      	str	r3, [r0, #0x4]
+ 8001164:      	bne	0x8001198 <__aeabi_memcpy4+0x74> @ imm = #0x30
+ 8001166:      	subs	r2, #0x8
+ 8001168:      	adds	r1, #0x8
+ 800116a:      	adds	r0, #0x8
+ 800116c:      	cmp.w	r12, #0xc
+ 8001170:      	blo	0x8001190 <__aeabi_memcpy4+0x6c> @ imm = #0x1c
+ 8001172:      	ldr	r3, [r1]
+ 8001174:      	subs	r2, #0x10
+ 8001176:      	str	r3, [r0]
+ 8001178:      	cmp	r2, #0x3
+ 800117a:      	ldr	r3, [r1, #0x4]
+ 800117c:      	str	r3, [r0, #0x4]
+ 800117e:      	ldr	r3, [r1, #0x8]
+ 8001180:      	str	r3, [r0, #0x8]
+ 8001182:      	ldr	r3, [r1, #0xc]
+ 8001184:      	add.w	r1, r1, #0x10
+ 8001188:      	str	r3, [r0, #0xc]
+ 800118a:      	add.w	r0, r0, #0x10
+ 800118e:      	bhi	0x8001172 <__aeabi_memcpy4+0x4e> @ imm = #-0x20
+ 8001190:      	pop.w	{r4, r5, r7, lr}
+ 8001194:      	b.w	0x8001120 <__aeabi_memcpy> @ imm = #-0x78
+ 8001198:      	ldr	r3, [r1, #0x8]
+ 800119a:      	subs	r2, #0xc
+ 800119c:      	str	r3, [r0, #0x8]
+ 800119e:      	adds	r1, #0xc
+ 80011a0:      	adds	r0, #0xc
+ 80011a2:      	cmp.w	r12, #0xc
+ 80011a6:      	bhs	0x8001172 <__aeabi_memcpy4+0x4e> @ imm = #-0x38
+ 80011a8:      	b	0x8001190 <__aeabi_memcpy4+0x6c> @ imm = #-0x1c
+
+080011aa <memcpy>:
+ 80011aa:      	push	{r4, r5, r6, r7, lr}
+ 80011ac:      	add	r7, sp, #0xc
+ 80011ae:      	str	r8, [sp, #-4]!
+ 80011b2:      	cbz	r2, 0x80011c6 <memcpy+0x1c> @ imm = #0x10
+ 80011b4:      	subs	r3, r2, #0x1
+ 80011b6:      	and	r12, r2, #0x3
+ 80011ba:      	cmp	r3, #0x3
+ 80011bc:      	bhs	0x80011cc <memcpy+0x22> @ imm = #0xc
+ 80011be:      	movs	r2, #0x0
+ 80011c0:      	cmp.w	r12, #0x0
+ 80011c4:      	bne	0x8001206 <memcpy+0x5c> @ imm = #0x3e
+ 80011c6:      	ldr	r8, [sp], #4
+ 80011ca:      	pop	{r4, r5, r6, r7, pc}
+ 80011cc:      	bic	r2, r2, #0x3
+ 80011d0:      	add.w	lr, r0, #0x1
+ 80011d4:      	rsbs	r4, r2, #0
+ 80011d6:      	add.w	r8, r1, #0x1
+ 80011da:      	mvn	r2, #0x3
+ 80011de:      	add.w	r5, r8, r2
+ 80011e2:      	add.w	r3, lr, r2
+ 80011e6:      	adds	r2, #0x4
+ 80011e8:      	ldrb	r6, [r5, #0x3]
+ 80011ea:      	strb	r6, [r3, #0x3]
+ 80011ec:      	ldrb	r6, [r5, #0x4]
+ 80011ee:      	strb	r6, [r3, #0x4]
+ 80011f0:      	ldrb	r6, [r5, #0x5]
+ 80011f2:      	strb	r6, [r3, #0x5]
+ 80011f4:      	ldrb	r5, [r5, #0x6]
+ 80011f6:      	strb	r5, [r3, #0x6]
+ 80011f8:      	adds	r3, r4, r2
+ 80011fa:      	adds	r3, #0x4
+ 80011fc:      	bne	0x80011de <memcpy+0x34> @ imm = #-0x22
+ 80011fe:      	adds	r2, #0x4
+ 8001200:      	cmp.w	r12, #0x0
+ 8001204:      	beq	0x80011c6 <memcpy+0x1c> @ imm = #-0x42
+ 8001206:      	ldrb	r3, [r1, r2]
+ 8001208:      	cmp.w	r12, #0x1
+ 800120c:      	strb	r3, [r0, r2]
+ 800120e:      	beq	0x80011c6 <memcpy+0x1c> @ imm = #-0x4c
+ 8001210:      	adds	r3, r2, #0x1
+ 8001212:      	cmp.w	r12, #0x2
+ 8001216:      	ldrb	r6, [r1, r3]
+ 8001218:      	strb	r6, [r0, r3]
+ 800121a:      	beq	0x80011c6 <memcpy+0x1c> @ imm = #-0x58
+ 800121c:      	adds	r2, #0x2
+ 800121e:      	ldrb	r1, [r1, r2]
+ 8001220:      	strb	r1, [r0, r2]
+ 8001222:      	ldr	r8, [sp], #4
+ 8001226:      	pop	{r4, r5, r6, r7, pc}
+
+08001228 <HardFaultTrampoline>:
+ 8001228:      	mov	r0, lr
+ 800122a:      	movs	r1, #0x4
+ 800122c:      	tst	r0, r1
+ 800122e:      	bne	0x8001236 <HardFaultTrampoline+0xe> @ imm = #0x4
+ 8001230:      	mrs	r0, msp
+ 8001234:      	b	0x800123c <HardFault_>  @ imm = #0x4
+ 8001236:      	mrs	r0, psp
+ 800123a:      	b	0x800123c <HardFault_>  @ imm = #-0x2
+
+0800123c <HardFault_>:
+;     loop {
+ 800123c:      	b	0x800123c <HardFault_>  @ imm = #-0x4
+ 800123e:      	bmi	0x80011ea <memcpy+0x40> @ imm = #-0x58
