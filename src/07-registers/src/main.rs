@@ -4,28 +4,28 @@
 use core::ptr;
 
 #[allow(unused_imports)]
-use aux7::{entry, iprint, iprintln};
+use aux7::{entry, iprintln, RegisterBlock, ITM};
 
 #[entry]
 fn main() -> ! {
-	aux7::init();
-
-	unsafe {
-		// A magic address!
-		const GPIOE_BSRR: u32 = 0x48001018;
-
-		// Turn on the "North" LED (red)
-		ptr::write_volatile(GPIOE_BSRR as *mut u32, 1 << 9);
-
-		// Turn on the "East" LED (green)
-		ptr::write_volatile(GPIOE_BSRR as *mut u32, 1 << 11);
-
-		// Turn off the "North" LED
-		ptr::write_volatile(GPIOE_BSRR as *mut u32, 1 << (9 + 16));
-
-		// Turn off the "East" LED
-		ptr::write_volatile(GPIOE_BSRR as *mut u32, 1 << (11 + 16));
-	}
-
+	let gpioe = aux7::init().1;
+	// turn on the north LED
+	gpioe.bsrr.write(|w| w.bs9().set_bit());
+	// turn on the east LED
+	gpioe.bsrr.write(|w| w.bs11().set_bit());
+	// turn off north and then east LED
+	gpioe.bsrr.write(|w| w.br9().set_bit());
+	gpioe.bsrr.write(|w| w.br11().set_bit());
 	loop {}
+}
+
+fn iprint_odr(itm: &mut ITM) {
+	const GPIOE_ODR: u32 = 0x4800_1014;
+	unsafe {
+		iprintln!(
+			&mut itm.stim[0],
+			"ODR = 0x{:04x}",
+			ptr::read_volatile(GPIOE_ODR as *const u16)
+		);
+	}
 }

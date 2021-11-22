@@ -1,15 +1,22 @@
+warning: function is never used: `iprint_odr`
+  --> src/07-registers/src/main.rs:22:4
+   |
+22 | fn iprint_odr(itm: &mut ITM) {
+   |    ^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` on by default
+
+warning: 1 warning emitted
+
 
 registers:	file format elf32-littlearm
 
 Disassembly of section .text:
 
 08000194 <Reset>:
-; pub unsafe extern "C" fn Reset() -> ! {
  8000194:      	push	{r7, lr}
  8000196:      	mov	r7, sp
-;     __pre_init();
  8000198:      	bl	0x8000d46 <__pre_init>  @ imm = #0xbaa
-;     while sbss < ebss {
  800019c:      	movw	r0, #0x4
  80001a0:      	movw	r1, #0x0
  80001a4:      	movt	r0, #0x2000
@@ -20,21 +27,16 @@ Disassembly of section .text:
  80001b4:      	movs	r2, #0x0
  80001b6:      	movt	r1, #0x2000
  80001ba:      	str	r2, [r1], #4
-;     while sbss < ebss {
  80001be:      	cmp	r1, r0
  80001c0:      	itttt	lo
  80001c2:      	strlo	r2, [r1], #4
-;     while sbss < ebss {
  80001c6:      	cmplo	r1, r0
  80001c8:      	strlo	r2, [r1], #4
-;     while sbss < ebss {
  80001cc:      	cmplo	r1, r0
  80001ce:      	bhs	0x80001d8 <Reset+0x44>  @ imm = #0x6
  80001d0:      	str	r2, [r1], #4
-;     while sbss < ebss {
  80001d4:      	cmp	r1, r0
  80001d6:      	blo	0x80001ba <Reset+0x26>  @ imm = #-0x20
-;     while sdata < edata {
  80001d8:      	movw	r1, #0x0
  80001dc:      	movw	r0, #0x0
  80001e0:      	movt	r1, #0x2000
@@ -54,26 +56,21 @@ Disassembly of section .text:
  8000206:      	bl	0x8001124 <__aeabi_memcpy4> @ imm = #0xf1a
  800020a:      	movw	r0, #0xed88
  800020e:      	movt	r0, #0xe000
-;                 *SCB_CPACR | SCB_CPACR_FPU_ENABLE | SCB_CPACR_FPU_USER,
  8000212:      	ldr	r1, [r0]
  8000214:      	orr	r1, r1, #0xf00000
  8000218:      	str	r1, [r0]
-;             trampoline()
  800021a:      	bl	0x8000d3a <ResetTrampoline> @ imm = #0xb1c
  800021e:      	trap
 
 08000220 <main>:
-; #[entry]
  8000220:      	push	{r7, lr}
  8000222:      	mov	r7, sp
  8000224:      	bl	0x800022a <registers::__cortex_m_rt_main::hbf612fdb771a7681> @ imm = #0x2
  8000228:      	trap
 
 0800022a <registers::__cortex_m_rt_main::hbf612fdb771a7681>:
-; fn main() -> ! {
  800022a:      	push	{r7, lr}
  800022c:      	mov	r7, sp
-; 	aux7::init();
  800022e:      	bl	0x8000254 <aux7::init::h2ae269f35bca95f0> @ imm = #0x22
  8000232:      	movw	r0, #0x1018
  8000236:      	mov.w	r1, #0x200
@@ -85,34 +82,24 @@ Disassembly of section .text:
  800024a:      	str	r1, [r0]
  800024c:      	mov.w	r1, #0x8000000
  8000250:      	str	r1, [r0]
-; 	loop {}
  8000252:      	b	0x8000252 <registers::__cortex_m_rt_main::hbf612fdb771a7681+0x28> @ imm = #-0x4
 
 08000254 <aux7::init::h2ae269f35bca95f0>:
-; pub fn init() -> (ITM, &'static RegisterBlock) {
  8000254:      	push	{r4, r5, r6, r7, lr}
  8000256:      	add	r7, sp, #0xc
  8000258:      	push.w	{r8, r9, r11}
-;     let r: u32 = call_asm!(__primask_r() -> u32);
  800025c:      	bl	0x800111a <__primask_r> @ imm = #0xeba
  8000260:      	mov	r4, r0
-;     call_asm!(__cpsid());
  8000262:      	bl	0x8001112 <__cpsid>     @ imm = #0xeac
-;             if unsafe { DEVICE_PERIPHERALS } {
  8000266:      	movw	r8, #0x0
-;     if r & (1 << 0) == (1 << 0) {
  800026a:      	and	r0, r4, #0x1
-;             if unsafe { DEVICE_PERIPHERALS } {
  800026e:      	movt	r8, #0x2000
  8000272:      	ldrb.w	r5, [r8]
  8000276:      	cmp	r5, #0x0
  8000278:      	itt	eq
  800027a:      	moveq	r1, #0x1
-;         DEVICE_PERIPHERALS = true;
  800027c:      	strbeq.w	r1, [r8]
-;     if primask.is_active() {
  8000280:      	cmp	r0, #0x0
-;     call_asm!(__cpsie());
  8000282:      	it	eq
  8000284:      	bleq	0x8001116 <__cpsie>     @ imm = #0xe8e
  8000288:      	cmp	r5, #0x0
@@ -121,81 +108,62 @@ Disassembly of section .text:
  8000292:      	movs	r6, #0x1
  8000294:      	movt	r0, #0x4002
  8000298:      	ldr	r1, [r0, #-20]
-;         self.w.bits = (self.w.bits & !(0x01 << 21)) | (((value as u32) & 0x01) << 21);
  800029c:      	orr	r1, r1, #0x200000
  80002a0:      	str	r1, [r0, #-20]
  80002a4:      	ldr	r1, [r0]
-;         self.w.bits = (self.w.bits & !(0x01 << 21)) | (((value as u32) & 0x01) << 21);
  80002a6:      	orr	r1, r1, #0x200000
  80002aa:      	str	r1, [r0]
  80002ac:      	ldr	r1, [r0]
-;         self.w.bits = (self.w.bits & !(0x01 << 21)) | (((value as u32) & 0x01) << 21);
  80002ae:      	bic	r1, r1, #0x200000
  80002b2:      	str	r1, [r0]
  80002b4:      	movw	r0, #0x1000
  80002b8:      	movt	r0, #0x4800
  80002bc:      	ldr	r1, [r0]
-;         self.w.bits = (self.w.bits & !(0x03 << 18)) | (((value as u32) & 0x03) << 18);
  80002be:      	bfi	r1, r6, #18, #2
  80002c2:      	str	r1, [r0]
  80002c4:      	ldr	r1, [r0, #0x4]
-;         self.w.bits = (self.w.bits & !(0x01 << 9)) | (((value as u32) & 0x01) << 9);
  80002c6:      	bic	r1, r1, #0x200
  80002ca:      	str	r1, [r0, #0x4]
  80002cc:      	ldr	r1, [r0]
-;         self.w.bits = (self.w.bits & !(0x03 << 16)) | (((value as u32) & 0x03) << 16);
  80002ce:      	bfi	r1, r6, #16, #2
  80002d2:      	str	r1, [r0]
  80002d4:      	ldr	r1, [r0, #0x4]
-;         self.w.bits = (self.w.bits & !(0x01 << 8)) | (((value as u32) & 0x01) << 8);
  80002d6:      	bic	r1, r1, #0x100
  80002da:      	str	r1, [r0, #0x4]
  80002dc:      	ldr	r1, [r0]
-;         self.w.bits = (self.w.bits & !(0x03 << 20)) | (((value as u32) & 0x03) << 20);
  80002de:      	bfi	r1, r6, #20, #2
  80002e2:      	str	r1, [r0]
  80002e4:      	ldr	r1, [r0, #0x4]
-;         self.w.bits = (self.w.bits & !(0x01 << 10)) | (((value as u32) & 0x01) << 10);
  80002e6:      	bic	r1, r1, #0x400
  80002ea:      	str	r1, [r0, #0x4]
  80002ec:      	ldr	r1, [r0]
-;         self.w.bits = (self.w.bits & !(0x03 << 30)) | (((value as u32) & 0x03) << 30);
  80002ee:      	bfi	r1, r6, #30, #2
  80002f2:      	str	r1, [r0]
  80002f4:      	ldr	r1, [r0, #0x4]
-;         self.w.bits = (self.w.bits & !(0x01 << 15)) | (((value as u32) & 0x01) << 15);
  80002f6:      	bic	r1, r1, #0x8000
  80002fa:      	str	r1, [r0, #0x4]
  80002fc:      	ldr	r1, [r0]
-;         self.w.bits = (self.w.bits & !(0x03 << 22)) | (((value as u32) & 0x03) << 22);
  80002fe:      	bfi	r1, r6, #22, #2
  8000302:      	str	r1, [r0]
  8000304:      	ldr	r1, [r0, #0x4]
-;         self.w.bits = (self.w.bits & !(0x01 << 11)) | (((value as u32) & 0x01) << 11);
  8000306:      	bic	r1, r1, #0x800
  800030a:      	str	r1, [r0, #0x4]
  800030c:      	ldr	r1, [r0]
-;         self.w.bits = (self.w.bits & !(0x03 << 28)) | (((value as u32) & 0x03) << 28);
  800030e:      	bfi	r1, r6, #28, #2
  8000312:      	str	r1, [r0]
  8000314:      	ldr	r1, [r0, #0x4]
-;         self.w.bits = (self.w.bits & !(0x01 << 14)) | (((value as u32) & 0x01) << 14);
  8000316:      	bic	r1, r1, #0x4000
  800031a:      	str	r1, [r0, #0x4]
  800031c:      	ldr	r1, [r0]
-;         self.w.bits = (self.w.bits & !(0x03 << 24)) | (((value as u32) & 0x03) << 24);
  800031e:      	bfi	r1, r6, #24, #2
  8000322:      	str	r1, [r0]
  8000324:      	ldr	r1, [r0, #0x4]
-;         self.w.bits = (self.w.bits & !(0x01 << 12)) | (((value as u32) & 0x01) << 12);
  8000326:      	bic	r1, r1, #0x1000
  800032a:      	str	r1, [r0, #0x4]
  800032c:      	ldr	r1, [r0]
-;         self.w.bits = (self.w.bits & !(0x03 << 26)) | (((value as u32) & 0x03) << 26);
  800032e:      	bfi	r1, r6, #26, #2
  8000332:      	str	r1, [r0]
  8000334:      	ldr	r1, [r0, #0x4]
-;         self.w.bits = (self.w.bits & !(0x01 << 13)) | (((value as u32) & 0x01) << 13);
  8000336:      	bic	r1, r1, #0x2000
  800033a:      	str	r1, [r0, #0x4]
  800033c:      	mov.w	r1, #0x2000000
@@ -214,44 +182,29 @@ Disassembly of section .text:
  8000364:      	str	r1, [r0, #0x18]
  8000366:      	mov.w	r1, #0x20000000
  800036a:      	str	r1, [r0, #0x18]
-;     let r: u32 = call_asm!(__primask_r() -> u32);
  800036c:      	bl	0x800111a <__primask_r> @ imm = #0xdaa
  8000370:      	mov	r9, r0
-;     call_asm!(__cpsid());
  8000372:      	bl	0x8001112 <__cpsid>     @ imm = #0xd9c
-;     let r: u32 = call_asm!(__primask_r() -> u32);
  8000376:      	bl	0x800111a <__primask_r> @ imm = #0xda0
  800037a:      	mov	r5, r0
-;     call_asm!(__cpsid());
  800037c:      	bl	0x8001112 <__cpsid>     @ imm = #0xd92
-;             if unsafe { TAKEN } {
  8000380:      	ldrb.w	r4, [r8, #0x1]
-;     if r & (1 << 0) == (1 << 0) {
  8000384:      	and	r0, r5, #0x1
-;             if unsafe { TAKEN } {
  8000388:      	cmp	r4, #0x0
-;         TAKEN = true;
  800038a:      	it	eq
  800038c:      	strbeq.w	r6, [r8, #0x1]
-;     if primask.is_active() {
  8000390:      	cmp	r0, #0x0
-;     call_asm!(__cpsie());
  8000392:      	it	eq
  8000394:      	bleq	0x8001116 <__cpsie>     @ imm = #0xd7e
-;         interrupt::free(|_| match cortex_m_0_7::peripheral::Peripherals::take() {
  8000398:      	cmp	r4, #0x0
  800039a:      	and	r0, r9, #0x1
  800039e:      	itt	eq
  80003a0:      	moveq	r1, #0x1
-;         TAKEN = true;
  80003a2:      	strbeq.w	r1, [r8, #0x1]
-;     if primask.is_active() {
  80003a6:      	cmp	r0, #0x0
-;     call_asm!(__cpsie());
  80003a8:      	it	eq
  80003aa:      	bleq	0x8001116 <__cpsie>     @ imm = #0xd68
  80003ae:      	cmp	r4, #0x0
-; }
  80003b0:      	itt	eq
  80003b2:      	popeq.w	{r8, r9, r11}
  80003b6:      	popeq	{r4, r5, r6, r7, pc}
@@ -1196,40 +1149,31 @@ Disassembly of section .text:
  8000d36:      	b.w	0x80006c2 <core::fmt::Formatter::pad::h5af7202c4eb8783b> @ imm = #-0x678
 
 08000d3a <ResetTrampoline>:
-;             fn trampoline() -> ! {
  8000d3a:      	push	{r7, lr}
  8000d3c:      	mov	r7, sp
-;                 unsafe { main() }
  8000d3e:      	bl	0x8000220 <main>        @ imm = #-0xb22
  8000d42:      	trap
 
 08000d44 <WWDG>:
-;     loop {
  8000d44:      	b	0x8000d44 <WWDG>        @ imm = #-0x4
 
 08000d46 <__pre_init>:
-; pub unsafe extern "C" fn DefaultPreInit() {}
  8000d46:      	bx	lr
 
 08000d48 <rust_begin_unwind>:
-; fn panic(info: &PanicInfo) -> ! {
  8000d48:      	push	{r7, lr}
  8000d4a:      	mov	r7, sp
  8000d4c:      	sub	sp, #0x30
  8000d4e:      	str	r0, [sp, #0x4]
-;     call_asm!(__cpsid());
  8000d50:      	bl	0x8001112 <__cpsid>     @ imm = #0x3be
-;     iprintln!(stim, "{}", info);
  8000d54:      	movw	r0, #0xd9b
  8000d58:      	movw	r1, #0x13c4
-;     iprintln!(stim, "{}", info);
  8000d5c:      	movt	r0, #0x800
  8000d60:      	add	r2, sp, #0x18
  8000d62:      	str	r0, [sp, #0xc]
  8000d64:      	add	r0, sp, #0x4
  8000d66:      	str	r0, [sp, #0x8]
  8000d68:      	mov.w	r0, #0xe0000000
-;     Port(port).write_fmt(args).ok();
  8000d6c:      	str	r0, [sp, #0x10]
  8000d6e:      	add	r0, sp, #0x10
  8000d70:      	str	r0, [sp, #0x14]
@@ -1247,7 +1191,6 @@ Disassembly of section .text:
  8000d90:      	str	r0, [sp, #0x18]
  8000d92:      	add	r0, sp, #0x14
  8000d94:      	bl	0x8000b76 <core::fmt::write::h706ba0ed69d89af5> @ imm = #-0x222
-;     loop {
  8000d98:      	b	0x8000d98 <rust_begin_unwind+0x50> @ imm = #-0x4
 
 08000d9a <<&T as core::fmt::Display>::fmt::h2254ef128b83af05>:
@@ -1348,157 +1291,114 @@ Disassembly of section .text:
 08000e92 <<&mut W as core::fmt::Write>::write_str::h6b29c08f95385faa>:
  8000e92:      	push	{r4, r5, r7, lr}
  8000e94:      	add	r7, sp, #0x8
-;         if len == 0 {
  8000e96:      	cmp	r2, #0x0
  8000e98:      	beq.w	0x8000f9e <<&mut W as core::fmt::Write>::write_str::h6b29c08f95385faa+0x10c> @ imm = #0x102
  8000e9c:      	ldr	r0, [r0]
-;         if ptr as usize % 2 == 1 {
  8000e9e:      	lsls	r3, r1, #0x1f
  8000ea0:      	ldr	r0, [r0]
-;         if ptr as usize % 2 == 1 {
  8000ea2:      	beq	0x8000ec6 <<&mut W as core::fmt::Write>::write_str::h6b29c08f95385faa+0x34> @ imm = #0x20
  8000ea4:      	ldr	r3, [r0]
-;             while !port.is_fifo_ready() {}
  8000ea6:      	lsls	r3, r3, #0x1f
  8000ea8:      	itttt	eq
  8000eaa:      	ldreq	r3, [r0]
-;             while !port.is_fifo_ready() {}
  8000eac:      	lslseq.w	r3, r3, #0x1f
  8000eb0:      	ldreq	r3, [r0]
-;             while !port.is_fifo_ready() {}
  8000eb2:      	lslseq.w	r3, r3, #0x1f
  8000eb6:      	bne	0x8000ebe <<&mut W as core::fmt::Write>::write_str::h6b29c08f95385faa+0x2c> @ imm = #0x4
  8000eb8:      	ldr	r3, [r0]
-;             while !port.is_fifo_ready() {}
  8000eba:      	lsls	r3, r3, #0x1f
  8000ebc:      	beq	0x8000ea4 <<&mut W as core::fmt::Write>::write_str::h6b29c08f95385faa+0x12> @ imm = #-0x1c
-;             port.write_u8(*ptr);
  8000ebe:      	ldrb	r3, [r1], #1
-;             len -= 1;
  8000ec2:      	subs	r2, #0x1
  8000ec4:      	strb	r3, [r0]
-;         if ptr as usize % 4 == 2 {
  8000ec6:      	and	r3, r1, #0x3
  8000eca:      	cmp	r3, #0x2
  8000ecc:      	bne	0x8000ef4 <<&mut W as core::fmt::Write>::write_str::h6b29c08f95385faa+0x62> @ imm = #0x24
-;             if len > 1 {
  8000ece:      	cmp	r2, #0x2
  8000ed0:      	blo	0x8000f7c <<&mut W as core::fmt::Write>::write_str::h6b29c08f95385faa+0xea> @ imm = #0xa8
  8000ed2:      	ldr	r3, [r0]
-;                 while !port.is_fifo_ready() {}
  8000ed4:      	lsls	r3, r3, #0x1f
  8000ed6:      	itttt	eq
  8000ed8:      	ldreq	r3, [r0]
-;                 while !port.is_fifo_ready() {}
  8000eda:      	lslseq.w	r3, r3, #0x1f
  8000ede:      	ldreq	r3, [r0]
-;                 while !port.is_fifo_ready() {}
  8000ee0:      	lslseq.w	r3, r3, #0x1f
  8000ee4:      	bne	0x8000eec <<&mut W as core::fmt::Write>::write_str::h6b29c08f95385faa+0x5a> @ imm = #0x4
  8000ee6:      	ldr	r3, [r0]
-;                 while !port.is_fifo_ready() {}
  8000ee8:      	lsls	r3, r3, #0x1f
  8000eea:      	beq	0x8000ed2 <<&mut W as core::fmt::Write>::write_str::h6b29c08f95385faa+0x40> @ imm = #-0x1c
-;                 port.write_u16(ptr::read(ptr as *const u16));
  8000eec:      	ldrh	r3, [r1], #2
-;                 len -= 2;
  8000ef0:      	subs	r2, #0x2
  8000ef2:      	strh	r3, [r0]
-;     if len == 0 {
  8000ef4:      	cmp	r2, #0x0
  8000ef6:      	beq	0x8000f9e <<&mut W as core::fmt::Write>::write_str::h6b29c08f95385faa+0x10c> @ imm = #0xa4
-;     let split = len & !0b11;
  8000ef8:      	bic	r12, r2, #0x3
-;         slice::from_raw_parts(buffer.as_ptr() as *const u32, split >> 2),
  8000efc:      	lsrs.w	lr, r2, #0x2
  8000f00:      	beq	0x8000f30 <<&mut W as core::fmt::Write>::write_str::h6b29c08f95385faa+0x9e> @ imm = #0x2c
  8000f02:      	movs	r3, #0x0
  8000f04:      	mov	r4, r1
  8000f06:      	b	0x8000f14 <<&mut W as core::fmt::Write>::write_str::h6b29c08f95385faa+0x82> @ imm = #0xa
-;         stim.write_u32(ptr::read(p));
  8000f08:      	ldr	r5, [r4], #4
  8000f0c:      	adds	r3, #0x1
  8000f0e:      	cmp	r3, lr
  8000f10:      	str	r5, [r0]
  8000f12:      	beq	0x8000f30 <<&mut W as core::fmt::Write>::write_str::h6b29c08f95385faa+0x9e> @ imm = #0x1a
  8000f14:      	ldr	r5, [r0]
-;         while !stim.is_fifo_ready() {}
  8000f16:      	lsls	r5, r5, #0x1f
  8000f18:      	itttt	eq
  8000f1a:      	ldreq	r5, [r0]
-;         while !stim.is_fifo_ready() {}
  8000f1c:      	lslseq.w	r5, r5, #0x1f
  8000f20:      	ldreq	r5, [r0]
-;         while !stim.is_fifo_ready() {}
  8000f22:      	lslseq.w	r5, r5, #0x1f
  8000f26:      	bne	0x8000f08 <<&mut W as core::fmt::Write>::write_str::h6b29c08f95385faa+0x76> @ imm = #-0x22
  8000f28:      	ldr	r5, [r0]
-;         while !stim.is_fifo_ready() {}
  8000f2a:      	lsls	r5, r5, #0x1f
  8000f2c:      	beq	0x8000f14 <<&mut W as core::fmt::Write>::write_str::h6b29c08f95385faa+0x82> @ imm = #-0x1c
  8000f2e:      	b	0x8000f08 <<&mut W as core::fmt::Write>::write_str::h6b29c08f95385faa+0x76> @ imm = #-0x2a
-;     let mut left = len & 0b11;
  8000f30:      	and	r2, r2, #0x3
  8000f34:      	add	r1, r12
-;     if left > 1 {
  8000f36:      	cmp	r2, #0x2
  8000f38:      	blo	0x8000f5c <<&mut W as core::fmt::Write>::write_str::h6b29c08f95385faa+0xca> @ imm = #0x20
  8000f3a:      	ldr	r3, [r0]
-;         while !port.is_fifo_ready() {}
  8000f3c:      	lsls	r3, r3, #0x1f
  8000f3e:      	itttt	eq
  8000f40:      	ldreq	r3, [r0]
-;         while !port.is_fifo_ready() {}
  8000f42:      	lslseq.w	r3, r3, #0x1f
  8000f46:      	ldreq	r3, [r0]
-;         while !port.is_fifo_ready() {}
  8000f48:      	lslseq.w	r3, r3, #0x1f
  8000f4c:      	bne	0x8000f54 <<&mut W as core::fmt::Write>::write_str::h6b29c08f95385faa+0xc2> @ imm = #0x4
  8000f4e:      	ldr	r3, [r0]
-;         while !port.is_fifo_ready() {}
  8000f50:      	lsls	r3, r3, #0x1f
  8000f52:      	beq	0x8000f3a <<&mut W as core::fmt::Write>::write_str::h6b29c08f95385faa+0xa8> @ imm = #-0x1c
-;         port.write_u16(ptr::read(ptr as *const u16));
  8000f54:      	ldrh	r3, [r1], #2
-;         left -= 2;
  8000f58:      	subs	r2, #0x2
  8000f5a:      	strh	r3, [r0]
-;     if left == 1 {
  8000f5c:      	cmp	r2, #0x1
  8000f5e:      	bne	0x8000f9e <<&mut W as core::fmt::Write>::write_str::h6b29c08f95385faa+0x10c> @ imm = #0x3c
  8000f60:      	ldr	r2, [r0]
-;         while !port.is_fifo_ready() {}
  8000f62:      	lsls	r2, r2, #0x1f
  8000f64:      	itttt	eq
  8000f66:      	ldreq	r2, [r0]
-;         while !port.is_fifo_ready() {}
  8000f68:      	lslseq.w	r2, r2, #0x1f
  8000f6c:      	ldreq	r2, [r0]
-;         while !port.is_fifo_ready() {}
  8000f6e:      	lslseq.w	r2, r2, #0x1f
  8000f72:      	bne	0x8000f9a <<&mut W as core::fmt::Write>::write_str::h6b29c08f95385faa+0x108> @ imm = #0x24
  8000f74:      	ldr	r2, [r0]
-;         while !port.is_fifo_ready() {}
  8000f76:      	lsls	r2, r2, #0x1f
  8000f78:      	beq	0x8000f60 <<&mut W as core::fmt::Write>::write_str::h6b29c08f95385faa+0xce> @ imm = #-0x1c
  8000f7a:      	b	0x8000f9a <<&mut W as core::fmt::Write>::write_str::h6b29c08f95385faa+0x108> @ imm = #0x1c
-;                 if len == 1 {
  8000f7c:      	cmp	r2, #0x1
  8000f7e:      	bne	0x8000f9e <<&mut W as core::fmt::Write>::write_str::h6b29c08f95385faa+0x10c> @ imm = #0x1c
  8000f80:      	ldr	r2, [r0]
-;                     while !port.is_fifo_ready() {}
  8000f82:      	lsls	r2, r2, #0x1f
  8000f84:      	bne	0x8000f9a <<&mut W as core::fmt::Write>::write_str::h6b29c08f95385faa+0x108> @ imm = #0x12
  8000f86:      	ldr	r2, [r0]
-;                     while !port.is_fifo_ready() {}
  8000f88:      	lsls	r2, r2, #0x1f
  8000f8a:      	itt	eq
  8000f8c:      	ldreq	r2, [r0]
-;                     while !port.is_fifo_ready() {}
  8000f8e:      	lslseq.w	r2, r2, #0x1f
  8000f92:      	bne	0x8000f9a <<&mut W as core::fmt::Write>::write_str::h6b29c08f95385faa+0x108> @ imm = #0x4
  8000f94:      	ldr	r2, [r0]
-;                     while !port.is_fifo_ready() {}
  8000f96:      	lsls	r2, r2, #0x1f
  8000f98:      	beq	0x8000f80 <<&mut W as core::fmt::Write>::write_str::h6b29c08f95385faa+0xee> @ imm = #-0x1c
  8000f9a:      	ldrb	r1, [r1]
@@ -1519,7 +1419,6 @@ Disassembly of section .text:
  8000fb6:      	movs	r1, #0x1
  8000fb8:      	mov.w	lr, #0x1
  8000fbc:      	ldr	r0, [r0]
-;     let split = len & !0b11;
  8000fbe:      	and	r12, lr, #0x4
  8000fc2:      	cmp	r1, #0x0
  8000fc4:      	bne	0x8001050 <<&mut W as core::fmt::Write>::write_char::h64cc6e21ce67cdd8+0xae> @ imm = #0x88
@@ -1549,7 +1448,6 @@ Disassembly of section .text:
  800100e:      	mov.w	lr, #0x3
  8001012:      	movs	r1, #0x1
  8001014:      	ldr	r0, [r0]
-;     let split = len & !0b11;
  8001016:      	and	r12, lr, #0x4
  800101a:      	cmp	r1, #0x0
  800101c:      	beq	0x80010b0 <<&mut W as core::fmt::Write>::write_char::h64cc6e21ce67cdd8+0x10e> @ imm = #0x90
@@ -1567,58 +1465,43 @@ Disassembly of section .text:
  8001042:      	movs	r1, #0x0
  8001044:      	strb.w	r3, [sp, #0x1]
  8001048:      	ldr	r0, [r0]
-;     let split = len & !0b11;
  800104a:      	and	r12, lr, #0x4
  800104e:      	cbz	r1, 0x80010b0 <<&mut W as core::fmt::Write>::write_char::h64cc6e21ce67cdd8+0x10e> @ imm = #0x5e
  8001050:      	mov	r1, sp
-;     let mut left = len & 0b11;
  8001052:      	and	r2, lr, #0x3
  8001056:      	add	r1, r12
-;     if left > 1 {
  8001058:      	cmp	r2, #0x2
  800105a:      	blo	0x8001088 <<&mut W as core::fmt::Write>::write_char::h64cc6e21ce67cdd8+0xe6> @ imm = #0x2a
  800105c:      	ldr	r3, [r0]
-;         while !port.is_fifo_ready() {}
  800105e:      	lsls	r3, r3, #0x1f
  8001060:      	itttt	eq
  8001062:      	ldreq	r3, [r0]
-;         while !port.is_fifo_ready() {}
  8001064:      	lslseq.w	r3, r3, #0x1f
  8001068:      	ldreq	r3, [r0]
-;         while !port.is_fifo_ready() {}
  800106a:      	lslseq.w	r3, r3, #0x1f
  800106e:      	bne	0x8001076 <<&mut W as core::fmt::Write>::write_char::h64cc6e21ce67cdd8+0xd4> @ imm = #0x4
  8001070:      	ldr	r3, [r0]
-;         while !port.is_fifo_ready() {}
  8001072:      	lsls	r3, r3, #0x1f
  8001074:      	beq	0x800105c <<&mut W as core::fmt::Write>::write_char::h64cc6e21ce67cdd8+0xba> @ imm = #-0x1c
-;         port.write_u16(ptr::read(ptr as *const u16));
  8001076:      	ldrh	r3, [r1], #2
-;         left -= 2;
  800107a:      	subs	r2, #0x2
  800107c:      	strh	r3, [r0]
-;     if left == 1 {
  800107e:      	cmp	r2, #0x1
  8001080:      	beq	0x800108c <<&mut W as core::fmt::Write>::write_char::h64cc6e21ce67cdd8+0xea> @ imm = #0x8
  8001082:      	movs	r0, #0x0
  8001084:      	add	sp, #0x4
  8001086:      	pop	{r4, r6, r7, pc}
-;     if left == 1 {
  8001088:      	cmp	r2, #0x1
  800108a:      	bne	0x8001082 <<&mut W as core::fmt::Write>::write_char::h64cc6e21ce67cdd8+0xe0> @ imm = #-0xc
  800108c:      	ldr	r2, [r0]
-;         while !port.is_fifo_ready() {}
  800108e:      	lsls	r2, r2, #0x1f
  8001090:      	itttt	eq
  8001092:      	ldreq	r2, [r0]
-;         while !port.is_fifo_ready() {}
  8001094:      	lslseq.w	r2, r2, #0x1f
  8001098:      	ldreq	r2, [r0]
-;         while !port.is_fifo_ready() {}
  800109a:      	lslseq.w	r2, r2, #0x1f
  800109e:      	bne	0x80010a6 <<&mut W as core::fmt::Write>::write_char::h64cc6e21ce67cdd8+0x104> @ imm = #0x4
  80010a0:      	ldr	r2, [r0]
-;         while !port.is_fifo_ready() {}
  80010a2:      	lsls	r2, r2, #0x1f
  80010a4:      	beq	0x800108c <<&mut W as core::fmt::Write>::write_char::h64cc6e21ce67cdd8+0xea> @ imm = #-0x1c
  80010a6:      	ldrb	r1, [r1]
@@ -1630,25 +1513,20 @@ Disassembly of section .text:
  80010b4:      	movs	r1, #0x0
  80010b6:      	mov	r2, sp
  80010b8:      	b	0x80010c6 <<&mut W as core::fmt::Write>::write_char::h64cc6e21ce67cdd8+0x124> @ imm = #0xa
-;         stim.write_u32(ptr::read(p));
  80010ba:      	ldr	r4, [r2], #4
  80010be:      	adds	r1, #0x1
  80010c0:      	cmp	r1, r3
  80010c2:      	str	r4, [r0]
  80010c4:      	beq	0x8001050 <<&mut W as core::fmt::Write>::write_char::h64cc6e21ce67cdd8+0xae> @ imm = #-0x78
  80010c6:      	ldr	r4, [r0]
-;         while !stim.is_fifo_ready() {}
  80010c8:      	lsls	r4, r4, #0x1f
  80010ca:      	itttt	eq
  80010cc:      	ldreq	r4, [r0]
-;         while !stim.is_fifo_ready() {}
  80010ce:      	lslseq.w	r4, r4, #0x1f
  80010d2:      	ldreq	r4, [r0]
-;         while !stim.is_fifo_ready() {}
  80010d4:      	lslseq.w	r4, r4, #0x1f
  80010d8:      	bne	0x80010ba <<&mut W as core::fmt::Write>::write_char::h64cc6e21ce67cdd8+0x118> @ imm = #-0x22
  80010da:      	ldr	r4, [r0]
-;         while !stim.is_fifo_ready() {}
  80010dc:      	lsls	r4, r4, #0x1f
  80010de:      	beq	0x80010c6 <<&mut W as core::fmt::Write>::write_char::h64cc6e21ce67cdd8+0x124> @ imm = #-0x1c
  80010e0:      	b	0x80010ba <<&mut W as core::fmt::Write>::write_char::h64cc6e21ce67cdd8+0x118> @ imm = #-0x2a
@@ -1804,6 +1682,5 @@ Disassembly of section .text:
  800123a:      	b	0x800123c <HardFault_>  @ imm = #-0x2
 
 0800123c <HardFault_>:
-;     loop {
  800123c:      	b	0x800123c <HardFault_>  @ imm = #-0x4
  800123e:      	bmi	0x80011ea <memcpy+0x40> @ imm = #-0x58
