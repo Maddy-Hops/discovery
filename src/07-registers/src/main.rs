@@ -18,14 +18,3 @@ fn main() -> ! {
 	gpioe.bsrr.write(|w| w.br11().set_bit());
 	loop {}
 }
-
-fn iprint_odr(itm: &mut ITM) {
-	const GPIOE_ODR: u32 = 0x4800_1014;
-	unsafe {
-		iprintln!(
-			&mut itm.stim[0],
-			"ODR = 0x{:04x}",
-			ptr::read_volatile(GPIOE_ODR as *const u16)
-		);
-	}
-}
